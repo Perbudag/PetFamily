@@ -14,8 +14,8 @@ namespace PetFamily.Domain.Pet
             Description = description;
         }
 
-        public string Title { get; set; }
-        public string Description { get; set; }
+        private string Title { get; set; }
+        private string Description { get; set; }
 
         public static Result<Requisite> Create(string title, string description)
         {

@@ -7,20 +7,20 @@ namespace PetFamily.Domain.Pet
     {
         private List<Requisite> _Requisites;
 
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string HealthInformation { get; set; }
-        public string ResidentialAddress { get; set; }
-        public float Weight { get; set; }
-        public float Height { get; set; }
-        public string PhoneNumber { get; set; }
-        public DateTime DateOfBirth { get; set; }
-        public bool IsCastrated { get; set; }
-        public bool IsVaccinated { get; set; }
-        public AssistanceStatus AssistanceStatus { get; set; }
-        public IReadOnlyList<Requisite> Requisites => _Requisites.AsReadOnly();
-        public DateTime CreatedAt { get; set; }
+        private Guid Id { get; set; }
+        private string Name { get; set; }
+        private string Description { get; set; }
+        private string HealthInformation { get; set; }
+        private string ResidentialAddress { get; set; }
+        private float Weight { get; set; }
+        private float Height { get; set; }
+        private string PhoneNumber { get; set; }
+        private DateTime DateOfBirth { get; set; }
+        private bool IsCastrated { get; set; }
+        private bool IsVaccinated { get; set; }
+        private AssistanceStatus AssistanceStatus { get; set; }
+        private IReadOnlyList<Requisite> Requisites => _Requisites.AsReadOnly();
+        private DateTime CreatedAt { get; set; }
 
         private Pet()
         {
