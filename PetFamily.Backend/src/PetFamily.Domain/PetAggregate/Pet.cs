@@ -1,11 +1,12 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Common.Enity;
 using System.Collections.Generic;
 
-namespace PetFamily.Domain.Pet
+namespace PetFamily.Domain.PetAggregate
 {
     public class Pet
     {
-        private List<Requisite> _Requisites;
+        private List<RequisitesForAssistance> _Requisites;
 
         private Guid Id { get; }
         public string Name { get; private set; }
@@ -19,14 +20,13 @@ namespace PetFamily.Domain.Pet
         public bool IsCastrated { get; private set; }
         public bool IsVaccinated { get; private set; }
         public AssistanceStatus AssistanceStatus { get; private set; }
-        public IReadOnlyList<Requisite> Requisites => _Requisites.AsReadOnly();
+        public IReadOnlyList<RequisitesForAssistance> Requisites => _Requisites.AsReadOnly();
         public DateTime CreatedAt { get; private set; }
 
         private Pet()
         {
 
         }
-
         private Pet(string name,
                    string description,
                    string healthInformation,
@@ -38,7 +38,7 @@ namespace PetFamily.Domain.Pet
                    bool isCastrated,
                    bool isVaccinated,
                    AssistanceStatus assistanceStatus,
-                   List<Requisite> requisites)
+                   List<RequisitesForAssistance> requisites)
         {
             Id = Guid.NewGuid();
             Name = name;
@@ -67,7 +67,7 @@ namespace PetFamily.Domain.Pet
                                   bool isCastrated,
                                   bool isVaccinated,
                                   AssistanceStatus assistanceStatus,
-                                  List<Requisite> requisites)
+                                  List<RequisitesForAssistance> requisites)
         {
             var pet = new Pet(name,
                               description,
