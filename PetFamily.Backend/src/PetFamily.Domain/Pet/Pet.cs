@@ -40,6 +40,7 @@ namespace PetFamily.Domain.Pet
                    AssistanceStatus assistanceStatus,
                    List<Requisite> requisites)
         {
+            Id = Guid.NewGuid();
             Name = name;
             Description = description;
             HealthInformation = healthInformation;
