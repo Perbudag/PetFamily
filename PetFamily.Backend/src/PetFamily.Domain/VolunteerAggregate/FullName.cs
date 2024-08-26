@@ -8,9 +8,9 @@ namespace PetFamily.Domain.VolunteerAggregate
         public static readonly int LASTNAME_MAX_LENGTH = 50;
         public static readonly int PATRONYMIC_MAX_LENGTH = 50;
 
-        public string Firstname { get; private set; }
-        public string Lastname { get; private set; }
-        public string Patronymic { get; private set; }
+        public string Firstname { get; }
+        public string Lastname { get; }
+        public string Patronymic { get; }
 
 
         private FullName(string firstname, string lastname, string patronymic)

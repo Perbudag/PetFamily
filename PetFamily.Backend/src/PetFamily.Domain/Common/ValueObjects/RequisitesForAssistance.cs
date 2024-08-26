@@ -8,8 +8,8 @@ namespace PetFamily.Domain.Common.ValueObjects
         public static readonly int DESCRIPTION_MAX_LENGTH = 500;
 
 
-        public string Title { get; private set; }
-        public string Description { get; private set; }
+        public string Title { get; }
+        public string Description { get; }
 
 
         private RequisiteForAssistance(string title, string description)
