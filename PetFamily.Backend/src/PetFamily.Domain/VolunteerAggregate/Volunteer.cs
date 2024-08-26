@@ -1,5 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Domain.Common.Enity;
+using PetFamily.Domain.Common.ValueObjects;
 using PetFamily.Domain.PetAggregate;
 using System.Collections.Generic;
 
@@ -7,15 +7,13 @@ namespace PetFamily.Domain.VolunteerAggregate
 {
     public class Volunteer
     {
-        private List<SocialNetworks> _SocialNetworks;
+        private List<SocialNetwork> _SocialNetworks;
         private List<RequisitesForAssistance> _Requisites;
         private List<Pet> _Pets;
 
         
         public Guid Id { get; }
-        public string Firstname { get; private set; }
-        public string Lastname { get; private set; }
-        public string Patronymic { get; private set; }
+        public FullName FullName { get; private set; }
         public string Email { get; private set; }
         public string Description { get; private set; }
         public int YearsOfExperience { get; private set; }
@@ -23,7 +21,7 @@ namespace PetFamily.Domain.VolunteerAggregate
         public int PetsLookingForHomeCount { get; private set; }
         public int PetsOnTreatmentCount { get; private set; }
         public string PhoneNumber { get; private set; }
-        public IReadOnlyList<SocialNetworks> SocialNetworks => _SocialNetworks.AsReadOnly();
+        public IReadOnlyList<SocialNetwork> SocialNetworks => _SocialNetworks.AsReadOnly();
         public IReadOnlyList<RequisitesForAssistance> Requisites => _Requisites.AsReadOnly();
         public IReadOnlyList<Pet> Pets => _Pets.AsReadOnly();
 
@@ -31,9 +29,7 @@ namespace PetFamily.Domain.VolunteerAggregate
         {
             
         }
-        private Volunteer(string firstname,
-                          string lastname,
-                          string patronymic,
+        private Volunteer(FullName fullName,
                           string email,
                           string description,
                           int yearsOfExperience,
@@ -41,15 +37,13 @@ namespace PetFamily.Domain.VolunteerAggregate
                           int petsLookingForHomeCount,
                           int petsOnTreatmentCount,
                           string phoneNumber,
-                          List<SocialNetworks> socialNetworks,
+                          List<SocialNetwork> socialNetworks,
                           List<RequisitesForAssistance> requisites,
                           List<Pet> pets)
         {
 
             Id = Guid.NewGuid();
-            Firstname = firstname;
-            Lastname = lastname;
-            Patronymic = patronymic;
+            FullName = fullName;
             Email = email;
             Description = description;
             YearsOfExperience = yearsOfExperience;
@@ -72,13 +66,11 @@ namespace PetFamily.Domain.VolunteerAggregate
                                                int petsLookingForHomeCount,
                                                int petsOnTreatmentCount,
                                                string phoneNumber,
-                                               List<SocialNetworks> socialNetworks,
+                                               List<SocialNetwork> socialNetworks,
                                                List<RequisitesForAssistance> requisites,
                                                List<Pet> pets)
         {
-            var volunteer = new Volunteer(firstname,
-                                          lastname,
-                                          patronymic,
+            var volunteer = new Volunteer(new FullName(firstname, lastname, patronymic),
                                           email,
                                           description,
                                           yearsOfExperience,

@@ -1,5 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Domain.Common.Enity;
+using PetFamily.Domain.Common.ValueObjects;
 using System.Collections.Generic;
 
 namespace PetFamily.Domain.PetAggregate
