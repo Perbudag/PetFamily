@@ -6,8 +6,8 @@ namespace PetFamily.Domain.VolunteerAggregate
     {
         public static readonly int NAME_MAX_LENGTH = 100;
 
-        public string Name { get; private set; }
-        public string Path { get; private set; }
+        public string Name { get; }
+        public string Path { get; }
 
         private SocialNetwork(string name, string path)
         {
