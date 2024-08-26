@@ -11,6 +11,7 @@ namespace PetFamily.Domain.PetAggregate
         public static readonly int PHONE_NUMBER_LENGTH = 11;
 
         private List<RequisiteForAssistance> _Requisites;
+        private List<PetPhoto> _Photos;
 
         private Guid Id { get; }
         public string Name { get; private set; }
@@ -25,6 +26,7 @@ namespace PetFamily.Domain.PetAggregate
         public bool IsVaccinated { get; private set; }
         public AssistanceStatus AssistanceStatus { get; private set; }
         public IReadOnlyList<RequisiteForAssistance> Requisites => _Requisites.AsReadOnly();
+        public IReadOnlyList<PetPhoto> Photos => _Photos.AsReadOnly();
         public DateTime CreatedAt { get; private set; }
 
         private Pet()
@@ -42,7 +44,8 @@ namespace PetFamily.Domain.PetAggregate
                    bool isCastrated,
                    bool isVaccinated,
                    AssistanceStatus assistanceStatus,
-                   List<RequisiteForAssistance> requisites)
+                   List<RequisiteForAssistance> requisites,
+                   List<PetPhoto> photos)
         {
             Id = Guid.NewGuid();
             Name = name;
@@ -57,6 +60,7 @@ namespace PetFamily.Domain.PetAggregate
             IsVaccinated = isVaccinated;
             AssistanceStatus = assistanceStatus;
             _Requisites = requisites;
+            _Photos = photos;
             CreatedAt = DateTime.UtcNow;
         }
 
@@ -71,7 +75,8 @@ namespace PetFamily.Domain.PetAggregate
                                   bool isCastrated,
                                   bool isVaccinated,
                                   AssistanceStatus assistanceStatus,
-                                  List<RequisiteForAssistance> requisites)
+                                  List<RequisiteForAssistance> requisites,
+                                  List<PetPhoto> photos)
         {
             if(string.IsNullOrWhiteSpace(name) || name.Length > NAME_MAX_LENGTH)
                 return Result.Failure<Pet>($"The \"name\" argument must not be empty and must consist of no more than {NAME_MAX_LENGTH} characters.");
@@ -105,7 +110,8 @@ namespace PetFamily.Domain.PetAggregate
                               isCastrated,
                               isVaccinated,
                               assistanceStatus,
-                              requisites);
+                              requisites,
+                              photos);
 
             return Result.Success(pet);
         }
