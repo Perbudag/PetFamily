@@ -1,11 +1,16 @@
 ﻿using CSharpFunctionalExtensions;
-using System.Collections.Generic;
+using PetFamily.Domain.Common.ValueObjects;
 
-namespace PetFamily.Domain.Pet
+namespace PetFamily.Domain.PetAggregate
 {
     public class Pet
     {
-        private List<Requisite> _Requisites;
+        public static readonly int NAME_MAX_LENGTH = 50;
+        public static readonly int DESCRIPTION_MAX_LENGTH = 500;
+        public static readonly int HEALTH_INFORMATION_MAX_LENGTH = 1000;
+        public static readonly int PHONE_NUMBER_LENGTH = 11;
+
+        private List<RequisiteForAssistance> _Requisites;
 
         private Guid Id { get; }
         public string Name { get; private set; }
@@ -19,14 +24,13 @@ namespace PetFamily.Domain.Pet
         public bool IsCastrated { get; private set; }
         public bool IsVaccinated { get; private set; }
         public AssistanceStatus AssistanceStatus { get; private set; }
-        public IReadOnlyList<Requisite> Requisites => _Requisites.AsReadOnly();
+        public IReadOnlyList<RequisiteForAssistance> Requisites => _Requisites.AsReadOnly();
         public DateTime CreatedAt { get; private set; }
 
         private Pet()
         {
 
         }
-
         private Pet(string name,
                    string description,
                    string healthInformation,
@@ -38,7 +42,7 @@ namespace PetFamily.Domain.Pet
                    bool isCastrated,
                    bool isVaccinated,
                    AssistanceStatus assistanceStatus,
-                   List<Requisite> requisites)
+                   List<RequisiteForAssistance> requisites)
         {
             Id = Guid.NewGuid();
             Name = name;
@@ -67,8 +71,29 @@ namespace PetFamily.Domain.Pet
                                   bool isCastrated,
                                   bool isVaccinated,
                                   AssistanceStatus assistanceStatus,
-                                  List<Requisite> requisites)
+                                  List<RequisiteForAssistance> requisites)
         {
+            if(string.IsNullOrWhiteSpace(name) || name.Length > NAME_MAX_LENGTH)
+                return Result.Failure<Pet>($"The \"name\" argument must not be empty and must consist of no more than {NAME_MAX_LENGTH} characters.");
+
+            if(string.IsNullOrWhiteSpace(description) || description.Length > DESCRIPTION_MAX_LENGTH)
+                return Result.Failure<Pet>($"The \"description\" argument must not be empty and must consist of no more than {DESCRIPTION_MAX_LENGTH} characters.");
+
+            if(string.IsNullOrWhiteSpace(healthInformation) || healthInformation.Length > HEALTH_INFORMATION_MAX_LENGTH)
+                return Result.Failure<Pet>($"The \"healthInformation\" argument must not be empty and must consist of no more than {HEALTH_INFORMATION_MAX_LENGTH} characters.");
+
+            if(string.IsNullOrWhiteSpace(residentialAddress))
+                return Result.Failure<Pet>($"The \"residentialAddress\" argument must not be empty.");
+
+            if(weight <= 0)
+                return Result.Failure<Pet>($"The \"weight\" argument must be greater than zero.");
+
+            if(height <= 0)
+                return Result.Failure<Pet>($"The \"height\" argument must be greater than zero.");
+
+            if(phoneNumber.Length != PHONE_NUMBER_LENGTH)
+                return Result.Failure<Pet>($"The \"phoneNumber\" argument must be {PHONE_NUMBER_LENGTH} characters long.");
+
             var pet = new Pet(name,
                               description,
                               healthInformation,
