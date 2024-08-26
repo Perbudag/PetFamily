@@ -1,17 +1,20 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Common.ValueObjects;
 using PetFamily.Domain.PetAggregate;
-using System.Collections.Generic;
 
 namespace PetFamily.Domain.VolunteerAggregate
 {
     public class Volunteer
     {
+        public static readonly int EMAIL_MAX_LENGTH = 320;
+        public static readonly int DESCRIPTION_MAX_LENGTH = 500;
+        public static readonly int PHONE_NUMBER_LENGTH = 11;
+
+
         private List<SocialNetwork> _SocialNetworks;
-        private List<RequisitesForAssistance> _Requisites;
+        private List<RequisiteForAssistance> _Requisites;
         private List<Pet> _Pets;
 
-        
         public Guid Id { get; }
         public FullName FullName { get; private set; }
         public string Email { get; private set; }
@@ -22,7 +25,7 @@ namespace PetFamily.Domain.VolunteerAggregate
         public int PetsOnTreatmentCount { get; private set; }
         public string PhoneNumber { get; private set; }
         public IReadOnlyList<SocialNetwork> SocialNetworks => _SocialNetworks.AsReadOnly();
-        public IReadOnlyList<RequisitesForAssistance> Requisites => _Requisites.AsReadOnly();
+        public IReadOnlyList<RequisiteForAssistance> Requisites => _Requisites.AsReadOnly();
         public IReadOnlyList<Pet> Pets => _Pets.AsReadOnly();
 
         private Volunteer()
@@ -38,7 +41,7 @@ namespace PetFamily.Domain.VolunteerAggregate
                           int petsOnTreatmentCount,
                           string phoneNumber,
                           List<SocialNetwork> socialNetworks,
-                          List<RequisitesForAssistance> requisites,
+                          List<RequisiteForAssistance> requisites,
                           List<Pet> pets)
         {
 
@@ -56,9 +59,7 @@ namespace PetFamily.Domain.VolunteerAggregate
             _Pets = pets;
         }
 
-        public static Result<Volunteer> Create(string firstname,
-                                               string lastname,
-                                               string patronymic,
+        public static Result<Volunteer> Create(FullName fullName,
                                                string email,
                                                string description,
                                                int yearsOfExperience,
@@ -67,10 +68,19 @@ namespace PetFamily.Domain.VolunteerAggregate
                                                int petsOnTreatmentCount,
                                                string phoneNumber,
                                                List<SocialNetwork> socialNetworks,
-                                               List<RequisitesForAssistance> requisites,
+                                               List<RequisiteForAssistance> requisites,
                                                List<Pet> pets)
         {
-            var volunteer = new Volunteer(new FullName(firstname, lastname, patronymic),
+            if(string.IsNullOrWhiteSpace(email) || email.Length > EMAIL_MAX_LENGTH)
+                return Result.Failure<Volunteer>($"The \"email\" argument must not be empty and must consist of no more than {EMAIL_MAX_LENGTH} characters.");
+
+            if(description.Length > DESCRIPTION_MAX_LENGTH)
+                return Result.Failure<Volunteer>($"The \"description\" argument must not contain more than {DESCRIPTION_MAX_LENGTH} characters");
+
+            if(phoneNumber.Length != PHONE_NUMBER_LENGTH)
+                return Result.Failure<Volunteer>($"The \"phoneNumber\" argument must be {PHONE_NUMBER_LENGTH} characters long.");
+
+            var volunteer = new Volunteer(fullName,
                                           email,
                                           description,
                                           yearsOfExperience,
