@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace PetFamily.Domain.Common.ValueObjects
+namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
 {
     public record RequisiteForAssistance
     {

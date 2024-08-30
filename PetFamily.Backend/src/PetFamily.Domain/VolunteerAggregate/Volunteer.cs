@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Domain.Common.ValueObjects;
-using PetFamily.Domain.PetAggregate;
+using PetFamily.Domain.VolunteerAggregate.Entities;
+using PetFamily.Domain.VolunteerAggregate.ValueObjects;
 
 namespace PetFamily.Domain.VolunteerAggregate
 {
@@ -28,10 +28,7 @@ namespace PetFamily.Domain.VolunteerAggregate
         public IReadOnlyList<RequisiteForAssistance> Requisites => _Requisites.AsReadOnly();
         public IReadOnlyList<Pet> Pets => _Pets.AsReadOnly();
 
-        private Volunteer()
-        {
-            
-        }
+        private Volunteer() {}
         private Volunteer(FullName fullName,
                           string email,
                           string description,

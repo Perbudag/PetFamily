@@ -1,4 +1,4 @@
-﻿namespace PetFamily.Domain.PetAggregate
+﻿namespace PetFamily.Domain.VolunteerAggregate.Enums
 {
     public enum AssistanceStatus
     {
