@@ -1,7 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Domain.Common.ValueObjects;
+using PetFamily.Domain.VolunteerAggregate.Enums;
+using PetFamily.Domain.VolunteerAggregate.ValueObjects;
 
-namespace PetFamily.Domain.PetAggregate
+namespace PetFamily.Domain.VolunteerAggregate.Entities
 {
     public class Pet
     {
@@ -29,10 +30,7 @@ namespace PetFamily.Domain.PetAggregate
         public IReadOnlyList<PetPhoto> Photos => _Photos.AsReadOnly();
         public DateTime CreatedAt { get; private set; }
 
-        private Pet()
-        {
-
-        }
+        private Pet() {}
         private Pet(string name,
                    string description,
                    string healthInformation,

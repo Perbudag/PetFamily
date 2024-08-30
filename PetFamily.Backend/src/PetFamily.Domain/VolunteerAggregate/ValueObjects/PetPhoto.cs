@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace PetFamily.Domain.PetAggregate
+namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
 {
     public record PetPhoto
     {
