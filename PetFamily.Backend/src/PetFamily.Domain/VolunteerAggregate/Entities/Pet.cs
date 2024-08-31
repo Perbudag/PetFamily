@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared.Models;
 using PetFamily.Domain.VolunteerAggregate.Enums;
 using PetFamily.Domain.VolunteerAggregate.ValueObjects;
 
@@ -6,16 +7,16 @@ namespace PetFamily.Domain.VolunteerAggregate.Entities
 {
     public class Pet
     {
-        public static readonly int NAME_MAX_LENGTH = 50;
-        public static readonly int SPECIES_MAX_LENGTH = 50;
-        public static readonly int DESCRIPTION_MAX_LENGTH = 500;
-        public static readonly int BREED_MAX_LENGTH = 50;
-        public static readonly int COLORATION_MAX_LENGTH = 100;
-        public static readonly int HEALTH_INFORMATION_MAX_LENGTH = 1000;
-        public static readonly int PHONE_NUMBER_LENGTH = 11;
+        public const int NAME_MAX_LENGTH = 50;
+        public const int SPECIES_MAX_LENGTH = 50;
+        public const int DESCRIPTION_MAX_LENGTH = 500;
+        public const int BREED_MAX_LENGTH = 50;
+        public const int COLORATION_MAX_LENGTH = 100;
+        public const int HEALTH_INFORMATION_MAX_LENGTH = 1000;
+        public const int PHONE_NUMBER_LENGTH = 11;
 
-        private List<RequisiteForAssistance> _Requisites;
-        private List<PetPhoto> _Photos;
+        private readonly List<RequisiteForAssistance> _Requisites;
+        private readonly List<PetPhoto> _Photos;
 
         private Guid Id { get; }
         public string Name { get; private set; }
@@ -32,8 +33,8 @@ namespace PetFamily.Domain.VolunteerAggregate.Entities
         public bool IsCastrated { get; private set; }
         public bool IsVaccinated { get; private set; }
         public AssistanceStatus AssistanceStatus { get; private set; }
-        public IReadOnlyList<RequisiteForAssistance> Requisites => _Requisites.AsReadOnly();
-        public IReadOnlyList<PetPhoto> Photos => _Photos.AsReadOnly();
+        public ValueObjectList<RequisiteForAssistance> Requisites => _Requisites;
+        public ValueObjectList<PetPhoto> Photos => _Photos;
         public DateTime CreatedAt { get; private set; }
 
         private Pet() {}

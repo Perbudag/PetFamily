@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared.Models;
 using PetFamily.Domain.VolunteerAggregate.Entities;
 using PetFamily.Domain.VolunteerAggregate.ValueObjects;
 
@@ -6,14 +7,14 @@ namespace PetFamily.Domain.VolunteerAggregate
 {
     public class Volunteer
     {
-        public static readonly int EMAIL_MAX_LENGTH = 320;
-        public static readonly int DESCRIPTION_MAX_LENGTH = 500;
-        public static readonly int PHONE_NUMBER_LENGTH = 11;
+        public const int EMAIL_MAX_LENGTH = 320;
+        public const int DESCRIPTION_MAX_LENGTH = 500;
+        public const int PHONE_NUMBER_LENGTH = 11;
 
 
-        private List<SocialNetwork> _SocialNetworks;
-        private List<RequisiteForAssistance> _Requisites;
-        private List<Pet> _Pets;
+        private readonly List<SocialNetwork> _SocialNetworks;
+        private readonly List<RequisiteForAssistance> _Requisites;
+        private readonly List<Pet> _Pets;
 
         public Guid Id { get; }
         public FullName FullName { get; private set; }
@@ -24,9 +25,9 @@ namespace PetFamily.Domain.VolunteerAggregate
         public int PetsLookingForHomeCount { get; private set; }
         public int PetsOnTreatmentCount { get; private set; }
         public string PhoneNumber { get; private set; }
-        public IReadOnlyList<SocialNetwork> SocialNetworks => _SocialNetworks.AsReadOnly();
-        public IReadOnlyList<RequisiteForAssistance> Requisites => _Requisites.AsReadOnly();
-        public IReadOnlyList<Pet> Pets => _Pets.AsReadOnly();
+        public ValueObjectList<SocialNetwork> SocialNetworks => _SocialNetworks;
+        public ValueObjectList<RequisiteForAssistance> Requisites => _Requisites;
+        public ValueObjectList<Pet> Pets => _Pets;
 
         private Volunteer() {}
         private Volunteer(FullName fullName,
