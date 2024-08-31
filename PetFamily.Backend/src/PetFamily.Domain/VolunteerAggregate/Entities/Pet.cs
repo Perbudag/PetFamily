@@ -18,7 +18,7 @@ namespace PetFamily.Domain.VolunteerAggregate.Entities
         private readonly List<RequisiteForAssistance> _Requisites;
         private readonly List<PetPhoto> _Photos;
 
-        private Guid Id { get; }
+        public Guid Id { get; }
         public string Name { get; private set; }
         public string Species { get; private set; }
         public string Description { get; private set; }

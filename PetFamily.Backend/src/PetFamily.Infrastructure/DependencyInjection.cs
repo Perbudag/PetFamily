@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PetFamily.Infrastructure.Database;
 
 namespace PetFamily.Infrastructure
 {
@@ -7,6 +8,8 @@ namespace PetFamily.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddScoped<PetFamilyDbContext>();
+
             return services;
         }
     }
