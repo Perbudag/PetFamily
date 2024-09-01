@@ -2,12 +2,12 @@
 using PetFamily.Domain.Shared.Models;
 using PetFamily.Domain.VolunteerAggregate.Entities;
 using PetFamily.Domain.VolunteerAggregate.ValueObjects;
+using PetFamily.Domain.VolunteerAggregate.ValueObjects.Ids;
 
 namespace PetFamily.Domain.VolunteerAggregate
 {
-    public class Volunteer : Shared.Models.Entity<Guid>
+    public class Volunteer : Shared.Models.Entity<VolunteerId>
     {
-        public const int EMAIL_MAX_LENGTH = 320;
         public const int DESCRIPTION_MAX_LENGTH = 500;
         public const int PHONE_NUMBER_LENGTH = 11;
 
@@ -17,7 +17,7 @@ namespace PetFamily.Domain.VolunteerAggregate
         private readonly List<Pet> _Pets;
 
         public FullName FullName { get; private set; }
-        public string Email { get; private set; }
+        public EmailAddress Email { get; private set; }
         public string Description { get; private set; }
         public int YearsOfExperience { get; private set; }
         public int PetsFoundHomeCount { get; private set; }
@@ -28,9 +28,9 @@ namespace PetFamily.Domain.VolunteerAggregate
         public ValueObjectList<RequisiteForAssistance> Requisites => _Requisites;
         public ValueObjectList<Pet> Pets => _Pets;
 
-        private Volunteer() : base(Guid.NewGuid()) {}
+        private Volunteer() : base(VolunteerId.NewId()) {}
         private Volunteer(FullName fullName,
-                          string email,
+                          EmailAddress email,
                           string description,
                           int yearsOfExperience,
                           int petsFoundHomeCount,
@@ -39,7 +39,7 @@ namespace PetFamily.Domain.VolunteerAggregate
                           string phoneNumber,
                           List<SocialNetwork> socialNetworks,
                           List<RequisiteForAssistance> requisites,
-                          List<Pet> pets) : base(Guid.NewGuid())
+                          List<Pet> pets) : base(VolunteerId.NewId())
         {
             FullName = fullName;
             Email = email;
@@ -55,7 +55,7 @@ namespace PetFamily.Domain.VolunteerAggregate
         }
 
         public static Result<Volunteer> Create(FullName fullName,
-                                               string email,
+                                               EmailAddress email,
                                                string description,
                                                int yearsOfExperience,
                                                int petsFoundHomeCount,
@@ -66,9 +66,6 @@ namespace PetFamily.Domain.VolunteerAggregate
                                                List<RequisiteForAssistance> requisites,
                                                List<Pet> pets)
         {
-            if(string.IsNullOrWhiteSpace(email) || email.Length > EMAIL_MAX_LENGTH)
-                return Result.Failure<Volunteer>($"The \"email\" argument must not be empty and must consist of no more than {EMAIL_MAX_LENGTH} characters.");
-
             if(description.Length > DESCRIPTION_MAX_LENGTH)
                 return Result.Failure<Volunteer>($"The \"description\" argument must not contain more than {DESCRIPTION_MAX_LENGTH} characters");
 

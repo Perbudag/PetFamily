@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PetFamily.Domain.VolunteerAggregate.Entities;
 using PetFamily.Infrastructure.Extensions;
 using PetFamily.Domain.VolunteerAggregate.ValueObjects;
+using PetFamily.Domain.VolunteerAggregate.ValueObjects.Ids;
 
 namespace PetFamily.Infrastructure.Database.Configurations
 {
@@ -13,6 +14,12 @@ namespace PetFamily.Infrastructure.Database.Configurations
             builder.ToTable("pets");
 
             builder.HasKey(p => p.Id);
+
+            builder.Property(p => p.Id)
+                .IsRequired()
+                .HasConversion(
+                id => id.Value,
+                id => PetId.Create(id));
 
             builder.Property(p => p.Name)
                 .IsRequired()
@@ -39,7 +46,11 @@ namespace PetFamily.Infrastructure.Database.Configurations
                 .HasMaxLength(Pet.HEALTH_INFORMATION_MAX_LENGTH);
 
             builder.Property(p => p.ResidentialAddress)
-                .IsRequired();
+                .IsRequired()
+                .HasConversion(
+                    a => a.ToString(),
+                    a => MapAddress.Parse(a).Value)
+                .HasMaxLength(MapAddress.ADDRESS_MAX_LENGTH);
 
             builder.Property(p => p.Weight)
                 .IsRequired();

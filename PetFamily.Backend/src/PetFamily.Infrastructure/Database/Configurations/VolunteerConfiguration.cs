@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PetFamily.Domain.VolunteerAggregate;
 using PetFamily.Infrastructure.Extensions;
 using PetFamily.Domain.VolunteerAggregate.ValueObjects;
+using PetFamily.Domain.VolunteerAggregate.ValueObjects.Ids;
 
 namespace PetFamily.Infrastructure.Database.Configurations
 {
@@ -13,6 +14,12 @@ namespace PetFamily.Infrastructure.Database.Configurations
             builder.ToTable("volunteers");
 
             builder.HasKey(v => v.Id);
+
+            builder.Property(v => v.Id)
+                .IsRequired()
+                .HasConversion(
+                id => id.Value,
+                id => VolunteerId.Create(id));
 
             builder.ComplexProperty(v => v.FullName, fullnameBuilder =>
             {
@@ -34,7 +41,10 @@ namespace PetFamily.Infrastructure.Database.Configurations
 
             builder.Property(v => v.Email)
                 .IsRequired()
-                .HasMaxLength(Volunteer.EMAIL_MAX_LENGTH);
+                .HasConversion(
+                    e => e.ToString(),
+                    e => EmailAddress.Parse(e).Value)
+                .HasMaxLength(EmailAddress.EMAIL_MAX_LENGTH);
 
             builder.Property(v => v.Description)
                 .IsRequired(false)

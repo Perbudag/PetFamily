@@ -2,10 +2,11 @@
 using PetFamily.Domain.Shared.Models;
 using PetFamily.Domain.VolunteerAggregate.Enums;
 using PetFamily.Domain.VolunteerAggregate.ValueObjects;
+using PetFamily.Domain.VolunteerAggregate.ValueObjects.Ids;
 
 namespace PetFamily.Domain.VolunteerAggregate.Entities
 {
-    public class Pet : Shared.Models.Entity<Guid>
+    public class Pet : Shared.Models.Entity<PetId>
     {
         public const int NAME_MAX_LENGTH = 50;
         public const int SPECIES_MAX_LENGTH = 50;
@@ -24,7 +25,7 @@ namespace PetFamily.Domain.VolunteerAggregate.Entities
         public string Breed { get; private set; }
         public string Coloration { get; private set; }
         public string HealthInformation { get; private set; }
-        public string ResidentialAddress { get; private set; }
+        public MapAddress ResidentialAddress { get; private set; }
         public float Weight { get; private set; }
         public float Height { get; private set; }
         public string PhoneNumber { get; private set; }
@@ -36,14 +37,14 @@ namespace PetFamily.Domain.VolunteerAggregate.Entities
         public ValueObjectList<PetPhoto> Photos => _Photos;
         public DateTime CreatedAt { get; private set; }
 
-        private Pet() : base(Guid.NewGuid()) {}
+        private Pet() : base(PetId.NewId()) {}
         private Pet(string name,
                    string species,
                    string description,
                    string breed,
                    string coloration,
                    string healthInformation,
-                   string residentialAddress,
+                   MapAddress residentialAddress,
                    float weight,
                    float height,
                    string phoneNumber,
@@ -52,7 +53,7 @@ namespace PetFamily.Domain.VolunteerAggregate.Entities
                    bool isVaccinated,
                    AssistanceStatus assistanceStatus,
                    List<RequisiteForAssistance> requisites,
-                   List<PetPhoto> photos) : base(Guid.NewGuid())
+                   List<PetPhoto> photos) : base(PetId.NewId())
         {
             Name = name;
             Species = species;
@@ -79,7 +80,7 @@ namespace PetFamily.Domain.VolunteerAggregate.Entities
                                   string breed,
                                   string coloration,
                                   string healthInformation,
-                                  string residentialAddress,
+                                  MapAddress residentialAddress,
                                   float weight,
                                   float height,
                                   string phoneNumber,
@@ -108,7 +109,7 @@ namespace PetFamily.Domain.VolunteerAggregate.Entities
             if(string.IsNullOrWhiteSpace(healthInformation) || healthInformation.Length > HEALTH_INFORMATION_MAX_LENGTH)
                 return Result.Failure<Pet>($"The \"healthInformation\" argument must not be empty and must consist of no more than {HEALTH_INFORMATION_MAX_LENGTH} characters.");
 
-            if(string.IsNullOrWhiteSpace(residentialAddress))
+            if(residentialAddress == null)
                 return Result.Failure<Pet>($"The \"residentialAddress\" argument must not be empty.");
 
             if(weight <= 0)
