@@ -4,8 +4,8 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
 {
     public record RequisiteForAssistance
     {
-        public static readonly int TITLE_MAX_LENGTH = 250;
-        public static readonly int DESCRIPTION_MAX_LENGTH = 500;
+        public const int TITLE_MAX_LENGTH = 250;
+        public const int DESCRIPTION_MAX_LENGTH = 500;
 
 
         public string Title { get; }

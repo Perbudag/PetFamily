@@ -4,7 +4,7 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
 {
     public record SocialNetwork
     {
-        public static readonly int NAME_MAX_LENGTH = 100;
+        public const int NAME_MAX_LENGTH = 100;
 
         public string Name { get; }
         public string Path { get; }

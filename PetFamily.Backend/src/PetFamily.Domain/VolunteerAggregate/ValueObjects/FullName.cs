@@ -4,9 +4,9 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
 {
     public record FullName
     {
-        public static readonly int FIRSTNAME_MAX_LENGTH = 50;
-        public static readonly int LASTNAME_MAX_LENGTH = 50;
-        public static readonly int PATRONYMIC_MAX_LENGTH = 50;
+        public const int FIRSTNAME_MAX_LENGTH = 50;
+        public const int LASTNAME_MAX_LENGTH = 50;
+        public const int PATRONYMIC_MAX_LENGTH = 50;
 
         public string Firstname { get; }
         public string Lastname { get; }
