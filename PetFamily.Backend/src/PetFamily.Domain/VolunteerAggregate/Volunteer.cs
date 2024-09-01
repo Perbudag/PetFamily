@@ -5,7 +5,7 @@ using PetFamily.Domain.VolunteerAggregate.ValueObjects;
 
 namespace PetFamily.Domain.VolunteerAggregate
 {
-    public class Volunteer
+    public class Volunteer : Shared.Models.Entity<Guid>
     {
         public const int EMAIL_MAX_LENGTH = 320;
         public const int DESCRIPTION_MAX_LENGTH = 500;
@@ -16,7 +16,6 @@ namespace PetFamily.Domain.VolunteerAggregate
         private readonly List<RequisiteForAssistance> _Requisites;
         private readonly List<Pet> _Pets;
 
-        public Guid Id { get; }
         public FullName FullName { get; private set; }
         public string Email { get; private set; }
         public string Description { get; private set; }
@@ -29,7 +28,7 @@ namespace PetFamily.Domain.VolunteerAggregate
         public ValueObjectList<RequisiteForAssistance> Requisites => _Requisites;
         public ValueObjectList<Pet> Pets => _Pets;
 
-        private Volunteer() {}
+        private Volunteer() : base(Guid.NewGuid()) {}
         private Volunteer(FullName fullName,
                           string email,
                           string description,
@@ -40,10 +39,8 @@ namespace PetFamily.Domain.VolunteerAggregate
                           string phoneNumber,
                           List<SocialNetwork> socialNetworks,
                           List<RequisiteForAssistance> requisites,
-                          List<Pet> pets)
+                          List<Pet> pets) : base(Guid.NewGuid())
         {
-
-            Id = Guid.NewGuid();
             FullName = fullName;
             Email = email;
             Description = description;

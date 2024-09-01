@@ -5,7 +5,7 @@ using PetFamily.Domain.VolunteerAggregate.ValueObjects;
 
 namespace PetFamily.Domain.VolunteerAggregate.Entities
 {
-    public class Pet
+    public class Pet : Shared.Models.Entity<Guid>
     {
         public const int NAME_MAX_LENGTH = 50;
         public const int SPECIES_MAX_LENGTH = 50;
@@ -18,7 +18,6 @@ namespace PetFamily.Domain.VolunteerAggregate.Entities
         private readonly List<RequisiteForAssistance> _Requisites;
         private readonly List<PetPhoto> _Photos;
 
-        public Guid Id { get; }
         public string Name { get; private set; }
         public string Species { get; private set; }
         public string Description { get; private set; }
@@ -37,7 +36,7 @@ namespace PetFamily.Domain.VolunteerAggregate.Entities
         public ValueObjectList<PetPhoto> Photos => _Photos;
         public DateTime CreatedAt { get; private set; }
 
-        private Pet() {}
+        private Pet() : base(Guid.NewGuid()) {}
         private Pet(string name,
                    string species,
                    string description,
@@ -53,9 +52,8 @@ namespace PetFamily.Domain.VolunteerAggregate.Entities
                    bool isVaccinated,
                    AssistanceStatus assistanceStatus,
                    List<RequisiteForAssistance> requisites,
-                   List<PetPhoto> photos)
+                   List<PetPhoto> photos) : base(Guid.NewGuid())
         {
-            Id = Guid.NewGuid();
             Name = name;
             Species = species;
             Description = description;
