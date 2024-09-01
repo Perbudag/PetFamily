@@ -13,7 +13,7 @@ using PetFamily.Infrastructure.Database;
 namespace PetFamily.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(PetFamilyDbContext))]
-    [Migration("20240901141822_ID-B-4-3")]
+    [Migration("20240901163230_ID-B-4-3")]
     partial class IDB43
     {
         /// <inheritdoc />
@@ -37,18 +37,6 @@ namespace PetFamily.Infrastructure.Database.Migrations
                         .HasColumnType("text")
                         .HasColumnName("assistance_status");
 
-                    b.Property<string>("Breed")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("breed");
-
-                    b.Property<string>("Coloration")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("coloration");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
@@ -61,24 +49,6 @@ namespace PetFamily.Infrastructure.Database.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)")
                         .HasColumnName("description");
-
-                    b.Property<string>("HealthInformation")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)")
-                        .HasColumnName("health_information");
-
-                    b.Property<float>("Height")
-                        .HasColumnType("real")
-                        .HasColumnName("height");
-
-                    b.Property<bool>("IsCastrated")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_castrated");
-
-                    b.Property<bool>("IsVaccinated")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_vaccinated");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -97,19 +67,59 @@ namespace PetFamily.Infrastructure.Database.Migrations
                         .HasColumnType("character varying(370)")
                         .HasColumnName("residential_address");
 
-                    b.Property<string>("Species")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("species");
-
-                    b.Property<float>("Weight")
-                        .HasColumnType("real")
-                        .HasColumnName("weight");
-
                     b.Property<Guid?>("volunteer_id")
                         .HasColumnType("uuid")
                         .HasColumnName("volunteer_id");
+
+                    b.ComplexProperty<Dictionary<string, object>>("AppearanceDetails", "PetFamily.Domain.VolunteerAggregate.Entities.Pet.AppearanceDetails#AppearanceDetails", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Breed")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("character varying(50)")
+                                .HasColumnName("breed");
+
+                            b1.Property<string>("Coloration")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)")
+                                .HasColumnName("coloration");
+
+                            b1.Property<float>("Height")
+                                .HasColumnType("real")
+                                .HasColumnName("height");
+
+                            b1.Property<string>("Species")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("character varying(50)")
+                                .HasColumnName("species");
+
+                            b1.Property<float>("Weight")
+                                .HasColumnType("real")
+                                .HasColumnName("weight");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("HealthDetails", "PetFamily.Domain.VolunteerAggregate.Entities.Pet.HealthDetails#HealthDetails", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Description")
+                                .IsRequired()
+                                .HasMaxLength(500)
+                                .HasColumnType("character varying(500)")
+                                .HasColumnName("health_description");
+
+                            b1.Property<bool>("IsCastrated")
+                                .HasColumnType("boolean")
+                                .HasColumnName("is_castrated");
+
+                            b1.Property<bool>("IsVaccinated")
+                                .HasColumnType("boolean")
+                                .HasColumnName("is_vaccinated");
+                        });
 
                     b.HasKey("Id")
                         .HasName("pk_pets");
@@ -137,26 +147,10 @@ namespace PetFamily.Infrastructure.Database.Migrations
                         .HasColumnType("character varying(320)")
                         .HasColumnName("email");
 
-                    b.Property<int>("PetsFoundHomeCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("pets_found_home_count");
-
-                    b.Property<int>("PetsLookingForHomeCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("pets_looking_for_home_count");
-
-                    b.Property<int>("PetsOnTreatmentCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("pets_on_treatment_count");
-
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("char(11)")
                         .HasColumnName("phone_number");
-
-                    b.Property<int>("YearsOfExperience")
-                        .HasColumnType("integer")
-                        .HasColumnName("years_of_experience");
 
                     b.ComplexProperty<Dictionary<string, object>>("FullName", "PetFamily.Domain.VolunteerAggregate.Volunteer.FullName#FullName", b1 =>
                         {
@@ -178,6 +172,35 @@ namespace PetFamily.Infrastructure.Database.Migrations
                                 .HasMaxLength(50)
                                 .HasColumnType("character varying(50)")
                                 .HasColumnName("patronymic");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("WorkExperienceDetails", "PetFamily.Domain.VolunteerAggregate.Volunteer.WorkExperienceDetails#WorkExperienceDetails", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<int>("PetsFoundHomeCount")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer")
+                                .HasDefaultValue(0)
+                                .HasColumnName("pets_found_home_count");
+
+                            b1.Property<int>("PetsLookingForHomeCount")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer")
+                                .HasDefaultValue(0)
+                                .HasColumnName("pets_looking_forHome_count");
+
+                            b1.Property<int>("PetsOnTreatmentCount")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer")
+                                .HasDefaultValue(0)
+                                .HasColumnName("pets_on_treatment_count");
+
+                            b1.Property<int>("WorkExperience")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer")
+                                .HasDefaultValue(0)
+                                .HasColumnName("work_experience");
                         });
 
                     b.HasKey("Id")

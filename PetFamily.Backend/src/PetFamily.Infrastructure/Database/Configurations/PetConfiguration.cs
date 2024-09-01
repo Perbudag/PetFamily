@@ -25,25 +25,51 @@ namespace PetFamily.Infrastructure.Database.Configurations
                 .IsRequired()
                 .HasMaxLength(Pet.NAME_MAX_LENGTH);
 
-            builder.Property(p => p.Species)
-                .IsRequired()
-                .HasMaxLength(Pet.SPECIES_MAX_LENGTH);
-
             builder.Property(p => p.Description)
                 .IsRequired(false)
                 .HasMaxLength(Pet.DESCRIPTION_MAX_LENGTH);
 
-            builder.Property(p => p.Breed)
+            builder.ComplexProperty(p => p.AppearanceDetails, b =>
+            {
+                b.Property(a => a.Species)
+                .HasColumnName("species")
                 .IsRequired()
-                .HasMaxLength(Pet.BREED_MAX_LENGTH);
+                .HasMaxLength(AppearanceDetails.SPECIES_MAX_LENGTH);
 
-            builder.Property(p => p.Coloration)
+                b.Property(a => a.Breed)
+                .HasColumnName("breed")
                 .IsRequired()
-                .HasMaxLength(Pet.COLORATION_MAX_LENGTH);
+                .HasMaxLength(AppearanceDetails.BREED_MAX_LENGTH);
 
-            builder.Property(p => p.HealthInformation)
+                b.Property(a => a.Coloration)
+                .HasColumnName("coloration")
+                    .IsRequired()
+                    .HasMaxLength(AppearanceDetails.COLORATION_MAX_LENGTH);
+
+                b.Property(a => a.Weight)
+                .HasColumnName("weight")
+                .IsRequired();
+
+                b.Property(a => a.Height)
+                .HasColumnName("height")
+                    .IsRequired();
+            });
+
+            builder.ComplexProperty(p => p.HealthDetails, b =>
+            {
+                b.Property(hd => hd.Description)
+                .HasColumnName("health_description")
                 .IsRequired()
-                .HasMaxLength(Pet.HEALTH_INFORMATION_MAX_LENGTH);
+                .HasMaxLength(HealthDetails.DESCRIPTION_MAX_LENGTH);
+
+                b.Property(hd => hd.IsCastrated)
+                .HasColumnName("is_castrated")
+                .IsRequired();
+
+                b.Property(hd => hd.IsVaccinated)
+                .HasColumnName("is_vaccinated")
+                .IsRequired();
+            });
 
             builder.Property(p => p.ResidentialAddress)
                 .IsRequired()
@@ -51,12 +77,6 @@ namespace PetFamily.Infrastructure.Database.Configurations
                     a => a.ToString(),
                     a => MapAddress.Parse(a).Value)
                 .HasMaxLength(MapAddress.ADDRESS_MAX_LENGTH);
-
-            builder.Property(p => p.Weight)
-                .IsRequired();
-
-            builder.Property(p => p.Height)
-                .IsRequired();
 
             builder.Property(p => p.PhoneNumber)
                 .IsRequired()
