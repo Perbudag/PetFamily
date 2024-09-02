@@ -11,8 +11,8 @@ namespace PetFamily.Domain.SpeciesAggregate.Entities
         public string Name { get; private set; }
 
 
-        public Breed() : base(BreedId.NewId()) { }
-        public Breed(string name) : base(BreedId.NewId())
+        private Breed() : base(BreedId.NewId()) { }
+        private Breed(string name) : base(BreedId.NewId())
         {
             Name = name;
         }
@@ -23,9 +23,9 @@ namespace PetFamily.Domain.SpeciesAggregate.Entities
             if (string.IsNullOrWhiteSpace(name) || name.Length > NAME_MAX_LENGTH)
                 return Result.Failure<Breed>($"The \"name\" argument must not be empty and must consist of no more than {NAME_MAX_LENGTH} characters.");
 
-            var species = new Breed(name);
+            var breed = new Breed(name);
 
-            return Result.Success(species);
+            return Result.Success(breed);
         }
     }
 }

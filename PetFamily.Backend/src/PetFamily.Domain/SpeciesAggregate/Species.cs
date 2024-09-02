@@ -13,8 +13,8 @@ namespace PetFamily.Domain.SpeciesAggregate
         public string Name { get; private set; }
         public IReadOnlyList<Breed> Breeds => _Breeds.AsReadOnly();
 
-        public Species() : base(SpeciesId.NewId()) { }
-        public Species(string name, List<Breed> breeds) : base(SpeciesId.NewId())
+        private Species() : base(SpeciesId.NewId()) { }
+        private Species(string name, List<Breed> breeds) : base(SpeciesId.NewId())
         {
             Name = name;
             _Breeds = breeds;
