@@ -1,0 +1,31 @@
+﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.SpeciesAggregate.ValueObjects.Ids;
+
+namespace PetFamily.Domain.SpeciesAggregate.Entities
+{
+    public class Breed : Shared.Models.Entity<BreedId>
+    {
+        public const int NAME_MAX_LENGTH = 50;
+
+
+        public string Name { get; private set; }
+
+
+        public Breed() : base(BreedId.NewId()) { }
+        public Breed(string name) : base(BreedId.NewId())
+        {
+            Name = name;
+        }
+
+
+        public static Result<Breed> Create(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name) || name.Length > NAME_MAX_LENGTH)
+                return Result.Failure<Breed>($"The \"name\" argument must not be empty and must consist of no more than {NAME_MAX_LENGTH} characters.");
+
+            var species = new Breed(name);
+
+            return Result.Success(species);
+        }
+    }
+}
