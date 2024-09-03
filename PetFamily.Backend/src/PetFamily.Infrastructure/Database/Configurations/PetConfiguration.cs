@@ -4,6 +4,7 @@ using PetFamily.Domain.VolunteerAggregate.Entities;
 using PetFamily.Infrastructure.Extensions;
 using PetFamily.Domain.VolunteerAggregate.ValueObjects;
 using PetFamily.Domain.VolunteerAggregate.ValueObjects.Ids;
+using PetFamily.Domain.SpeciesAggregate.ValueObjects.Ids;
 
 namespace PetFamily.Infrastructure.Database.Configurations
 {
@@ -18,8 +19,8 @@ namespace PetFamily.Infrastructure.Database.Configurations
             builder.Property(p => p.Id)
                 .IsRequired()
                 .HasConversion(
-                id => id.Value,
-                id => PetId.Create(id));
+                    id => id.Value,
+                    id => PetId.Create(id));
 
             builder.Property(p => p.Name)
                 .IsRequired()
@@ -31,15 +32,19 @@ namespace PetFamily.Infrastructure.Database.Configurations
 
             builder.ComplexProperty(p => p.AppearanceDetails, b =>
             {
-                b.Property(a => a.Species)
-                .HasColumnName("species")
+                b.Property(a => a.SpeciesId)
+                .HasColumnName("species_id")
                 .IsRequired()
-                .HasMaxLength(AppearanceDetails.SPECIES_MAX_LENGTH);
+                .HasConversion(
+                    id => id.Value,
+                    id => SpeciesId.Create(id));
 
-                b.Property(a => a.Breed)
-                .HasColumnName("breed")
+                b.Property(a => a.BreedId)
+                .HasColumnName("breed_id")
                 .IsRequired()
-                .HasMaxLength(AppearanceDetails.BREED_MAX_LENGTH);
+                .HasConversion(
+                    id => id.Value,
+                    id => BreedId.Create(id));
 
                 b.Property(a => a.Coloration)
                 .HasColumnName("coloration")
