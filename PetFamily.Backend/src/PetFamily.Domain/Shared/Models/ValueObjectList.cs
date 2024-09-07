@@ -10,10 +10,10 @@ namespace PetFamily.Domain.Shared.Models
         public int Count => Values.Count;
 
 
-        public ValueObjectList() { }
+        private ValueObjectList() { }
         public ValueObjectList(IEnumerable<T> list)
         {
-            Values = new List<T>(list);
+            Values = new List<T>(list).AsReadOnly();
         }
 
 
