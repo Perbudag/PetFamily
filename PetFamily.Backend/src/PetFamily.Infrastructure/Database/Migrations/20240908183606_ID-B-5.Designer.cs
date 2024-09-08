@@ -13,8 +13,8 @@ using PetFamily.Infrastructure.Database;
 namespace PetFamily.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(PetFamilyDbContext))]
-    [Migration("20240907133109_init")]
-    partial class init
+    [Migration("20240908183606_ID-B-5")]
+    partial class IDB5
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -191,6 +191,12 @@ namespace PetFamily.Infrastructure.Database.Migrations
                         .HasColumnType("char(11)")
                         .HasColumnName("phone_number");
 
+                    b.Property<int>("WorkExperience")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0)
+                        .HasColumnName("work_experience");
+
                     b.ComplexProperty<Dictionary<string, object>>("FullName", "PetFamily.Domain.VolunteerAggregate.Volunteer.FullName#FullName", b1 =>
                         {
                             b1.IsRequired();
@@ -211,35 +217,6 @@ namespace PetFamily.Infrastructure.Database.Migrations
                                 .HasMaxLength(50)
                                 .HasColumnType("character varying(50)")
                                 .HasColumnName("patronymic");
-                        });
-
-                    b.ComplexProperty<Dictionary<string, object>>("WorkExperienceDetails", "PetFamily.Domain.VolunteerAggregate.Volunteer.WorkExperienceDetails#WorkExperienceDetails", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<int>("PetsFoundHomeCount")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("integer")
-                                .HasDefaultValue(0)
-                                .HasColumnName("pets_found_home_count");
-
-                            b1.Property<int>("PetsLookingForHomeCount")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("integer")
-                                .HasDefaultValue(0)
-                                .HasColumnName("pets_looking_forHome_count");
-
-                            b1.Property<int>("PetsOnTreatmentCount")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("integer")
-                                .HasDefaultValue(0)
-                                .HasColumnName("pets_on_treatment_count");
-
-                            b1.Property<int>("WorkExperience")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("integer")
-                                .HasDefaultValue(0)
-                                .HasColumnName("work_experience");
                         });
 
                     b.HasKey("Id")

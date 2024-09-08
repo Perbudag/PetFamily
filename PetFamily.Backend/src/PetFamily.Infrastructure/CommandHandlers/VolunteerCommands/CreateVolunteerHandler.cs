@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using CSharpFunctionalExtensions.ValueTasks;
 using PetFamily.Application.Commands.Volunteer.Create;
 using PetFamily.Application.Interfaces.Repositories;
 using PetFamily.Domain.VolunteerAggregate;
@@ -12,12 +11,12 @@ namespace PetFamily.Infrastructure.CommandHandlers.VolunteerCommands
     internal class CreateVolunteerHandler : ICreateVolunteerHandler
     {
         private readonly PetFamilyDbContext _dbContext;
-        private readonly IVolunteerRepositoriy repositoriy;
+        private readonly IVolunteerRepositoriy _repositoriy;
 
         public CreateVolunteerHandler(PetFamilyDbContext dbContext, IVolunteerRepositoriy repositoriy)
         {
             _dbContext = dbContext;
-            this.repositoriy = repositoriy;
+            _repositoriy = repositoriy;
         }
 
         public async Task<Result<Guid>> Handle(CreateVolunteerCommand command, CancellationToken cancellationToken)
@@ -27,20 +26,15 @@ namespace PetFamily.Infrastructure.CommandHandlers.VolunteerCommands
             if (fullname.IsFailure)
                 return Result.Failure<Guid>(fullname.Error);
 
-            var workExperienceDetails = WorkExperienceDetails.Create(command.WorkExperience, command.PetsFoundHomeCount, command.PetsLookingForHomeCount, command.PetsOnTreatmentCount);
-
-            if (workExperienceDetails.IsFailure)
-                return Result.Failure<Guid>(workExperienceDetails.Error);
-
             var email = EmailAddress.Parse(command.Email);
 
             if (email.IsFailure)
                 return Result.Failure<Guid>(email.Error);
 
-            if (await repositoriy.EmailExists(email.Value, cancellationToken))
+            if (await _repositoriy.EmailExists(email.Value, cancellationToken))
                 return Result.Failure<Guid>("A volunteer with this email address already exists.");
 
-            if (await repositoriy.PhoneNumberExists(command.PhoneNumber, cancellationToken))
+            if (await _repositoriy.PhoneNumberExists(command.PhoneNumber, cancellationToken))
                 return Result.Failure<Guid>("A volunteer with this phone number already exists.");
 
             var socialNetworks = new List<Result<SocialNetwork>>();
@@ -76,7 +70,7 @@ namespace PetFamily.Infrastructure.CommandHandlers.VolunteerCommands
             var volunteer = Volunteer.Create(
                 fullname.Value,
                 command.Description,
-                workExperienceDetails.Value,
+                command.WorkExperience,
                 email.Value,
                 command.PhoneNumber,
                 socialNetworks.Select(x => x.Value).ToList(),
