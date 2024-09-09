@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using CSharpFunctionalExtensions.ValueTasks;
 namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
 {
     public record EmailAddress
@@ -25,6 +26,9 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
                 return Result.Failure<EmailAddress>($"The \"email\" argument must not be empty and must consist of no more than {EMAIL_MAX_LENGTH} characters.");
 
             var strs = email.Split('@');
+
+            if (strs.Length != 2)
+                return Result.Failure<EmailAddress>("Invalid email address");
 
             return Create(strs[0], strs[1]);
         }

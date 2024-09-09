@@ -12,9 +12,6 @@ namespace PetFamily.Domain.VolunteerAggregate.Entities
         public const int DESCRIPTION_MAX_LENGTH = 500;
         public const int PHONE_NUMBER_LENGTH = 11;
 
-        private readonly List<RequisiteForAssistance> _Requisites = [];
-        private readonly List<PetPhoto> _Photos = [];
-
         public string Name { get; private set; }
         public string Description { get; private set; }
         public AppearanceDetails AppearanceDetails { get; private set; }
@@ -23,8 +20,8 @@ namespace PetFamily.Domain.VolunteerAggregate.Entities
         public string PhoneNumber { get; private set; }
         public DateTime DateOfBirth { get; private set; }
         public AssistanceStatus AssistanceStatus { get; private set; }
-        public ValueObjectList<RequisiteForAssistance> Requisites => _Requisites;
-        public ValueObjectList<PetPhoto> Photos => _Photos;
+        public ValueObjectList<RequisiteForAssistance> Requisites { get; private set; }
+        public ValueObjectList<PetPhoto> Photos { get; private set; }
         public DateTime CreatedAt { get; private set; }
 
         private Pet() : base(PetId.NewId()) {}
@@ -48,8 +45,8 @@ namespace PetFamily.Domain.VolunteerAggregate.Entities
             PhoneNumber = phoneNumber;
             DateOfBirth = dateOfBirth;
             AssistanceStatus = assistanceStatus;
-            _Requisites = requisites;
-            _Photos = photos;
+            Requisites = requisites;
+            Photos = photos;
             CreatedAt = DateTime.UtcNow;
         }
 

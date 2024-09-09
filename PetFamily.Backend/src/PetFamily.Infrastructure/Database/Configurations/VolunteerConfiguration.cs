@@ -46,28 +46,9 @@ namespace PetFamily.Infrastructure.Database.Configurations
                 .IsRequired(false)
                 .HasMaxLength(Volunteer.DESCRIPTION_MAX_LENGTH);
 
-            builder.ComplexProperty(v => v.WorkExperienceDetails, b =>
-            {
-                b.Property(we => we.WorkExperience)
-                .HasColumnName("work_experience")
+            builder.Property(we => we.WorkExperience)
                 .IsRequired()
                 .HasDefaultValue(0);
-
-                b.Property(we => we.PetsFoundHomeCount)
-                .HasColumnName("pets_found_home_count")
-                .IsRequired()
-                .HasDefaultValue(0);
-
-                b.Property(we => we.PetsLookingForHomeCount)
-                .HasColumnName("pets_looking_forHome_count")
-                .IsRequired()
-                .HasDefaultValue(0);
-
-                b.Property(we => we.PetsOnTreatmentCount)
-                .HasColumnName("pets_on_treatment_count")
-                .IsRequired()
-                .HasDefaultValue(0);
-            });
 
             builder.Property(v => v.Email)
                .IsRequired()
