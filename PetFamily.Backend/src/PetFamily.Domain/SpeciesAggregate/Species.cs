@@ -1,4 +1,4 @@
-﻿using CSharpFunctionalExtensions;
+﻿using PetFamily.Domain.Shared.Models;
 using PetFamily.Domain.SpeciesAggregate.Entities;
 using PetFamily.Domain.SpeciesAggregate.ValueObjects.Ids;
 
@@ -23,11 +23,11 @@ namespace PetFamily.Domain.SpeciesAggregate
         public static Result<Species> Create(string name, List<Breed> breeds)
         {
             if (string.IsNullOrWhiteSpace(name) || name.Length > NAME_MAX_LENGTH)
-                return Result.Failure<Species>($"The \"name\" argument must not be empty and must consist of no more than {NAME_MAX_LENGTH} characters.");
+                return Error.Validation("Species.Create.Invalid", $"The \"name\" argument must not be empty and must consist of no more than {NAME_MAX_LENGTH} characters.");
 
             var species = new Species(name, breeds);
 
-            return Result.Success(species);
+            return species;
         }
     }
 }

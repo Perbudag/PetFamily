@@ -1,4 +1,4 @@
-﻿using CSharpFunctionalExtensions;
+﻿using PetFamily.Domain.Shared.Models;
 
 namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
 {
@@ -21,7 +21,7 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
         {
             var workExperienceDetails = new WorkExperienceDetails(workExperience, petsFoundHomeCount, petsLookingForHomeCount, petsOnTreatmentCount);
 
-            return Result.Success(workExperienceDetails);
+            return workExperienceDetails;
         }
     }
 }

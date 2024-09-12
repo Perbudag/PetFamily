@@ -1,5 +1,4 @@
-﻿using CSharpFunctionalExtensions;
-using PetFamily.Domain.Shared.Models;
+﻿using PetFamily.Domain.Shared.Models;
 using PetFamily.Domain.VolunteerAggregate.Enums;
 using PetFamily.Domain.VolunteerAggregate.ValueObjects;
 using PetFamily.Domain.VolunteerAggregate.ValueObjects.Ids;
@@ -50,7 +49,7 @@ namespace PetFamily.Domain.VolunteerAggregate.Entities
             CreatedAt = DateTime.UtcNow;
         }
 
-        public static Result<Pet> Creeate(
+        public static Result<Pet> Create(
             string name,
             string description,
             AppearanceDetails appearanceDetails,
@@ -63,22 +62,22 @@ namespace PetFamily.Domain.VolunteerAggregate.Entities
             List<PetPhoto> photos)
         {
             if(string.IsNullOrWhiteSpace(name) || name.Length > NAME_MAX_LENGTH)
-                return Result.Failure<Pet>($"The \"name\" argument must not be empty and must consist of no more than {NAME_MAX_LENGTH} characters.");
+                return Error.Validation("Pet.Create.Invalid", $"The \"name\" argument must not be empty and must consist of no more than {NAME_MAX_LENGTH} characters.");
 
             if(string.IsNullOrWhiteSpace(description) || description.Length > DESCRIPTION_MAX_LENGTH)
-                return Result.Failure<Pet>($"The \"description\" argument must not be empty and must consist of no more than {DESCRIPTION_MAX_LENGTH} characters.");
+                return Error.Validation("Pet.Create.Invalid", $"The \"description\" argument must not be empty and must consist of no more than {DESCRIPTION_MAX_LENGTH} characters.");
 
             if (appearanceDetails == null)
-                return Result.Failure<Pet>($"The \"appearanceDetails\" argument must not be empty.");
+                return Error.Validation("Pet.Create.Invalid", $"The \"appearanceDetails\" argument must not be empty.");
 
             if (healthDetails == null)
-                return Result.Failure<Pet>($"The \"healthDetails\" argument must not be empty.");
+                return Error.Validation("Pet.Create.Invalid", $"The \"healthDetails\" argument must not be empty.");
 
             if (residentialAddress == null)
-                return Result.Failure<Pet>($"The \"residentialAddress\" argument must not be empty.");
+                return Error.Validation("Pet.Create.Invalid", $"The \"residentialAddress\" argument must not be empty.");
 
             if(phoneNumber.Length != PHONE_NUMBER_LENGTH)
-                return Result.Failure<Pet>($"The \"phoneNumber\" argument must be {PHONE_NUMBER_LENGTH} characters long.");
+                return Error.Validation("Pet.Create.Invalid", $"The \"phoneNumber\" argument must be {PHONE_NUMBER_LENGTH} characters long.");
 
             var pet = new Pet(name,
                               description, 
@@ -91,7 +90,7 @@ namespace PetFamily.Domain.VolunteerAggregate.Entities
                               requisites,
                               photos);
 
-            return Result.Success(pet);
+            return pet;
         }
     }
 }

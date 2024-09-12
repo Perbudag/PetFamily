@@ -1,5 +1,4 @@
-﻿using CSharpFunctionalExtensions;
-using PetFamily.Domain.Shared.Models;
+﻿using PetFamily.Domain.Shared.Models;
 using PetFamily.Domain.VolunteerAggregate.Entities;
 using PetFamily.Domain.VolunteerAggregate.Enums;
 using PetFamily.Domain.VolunteerAggregate.ValueObjects;
@@ -57,16 +56,16 @@ namespace PetFamily.Domain.VolunteerAggregate
             List<Pet> pets)
         {
             if (fullName == null)
-                return Result.Failure<Volunteer>($"The \"fullName\" argument must not be empty.");
+                return Error.Validation("Volunteer.Create.Invalid", "The \"fullName\" argument must not be empty.");
 
             if (description.Length > DESCRIPTION_MAX_LENGTH)
-                return Result.Failure<Volunteer>($"The \"description\" argument must not contain more than {DESCRIPTION_MAX_LENGTH} characters");
+                return Error.Validation("Volunteer.Create.Invalid", $"The \"description\" argument must not contain more than {DESCRIPTION_MAX_LENGTH} characters");
 
             if (email == null)
-                return Result.Failure<Volunteer>($"The \"email\" argument must not be empty.");
+                return Error.Validation("Volunteer.Create.Invalid", $"The \"email\" argument must not be empty.");
 
             if (phoneNumber.Length != PHONE_NUMBER_LENGTH)
-                return Result.Failure<Volunteer>($"The \"phoneNumber\" argument must be {PHONE_NUMBER_LENGTH} characters long.");
+                return Error.Validation("Volunteer.Create.Invalid", $"The \"phoneNumber\" argument must be {PHONE_NUMBER_LENGTH} characters long.");
 
 
             var volunteer = new Volunteer(fullName,
@@ -78,7 +77,7 @@ namespace PetFamily.Domain.VolunteerAggregate
                                           requisites,
                                           pets);
 
-            return Result.Success(volunteer);
+            return volunteer;
         }
 
     }

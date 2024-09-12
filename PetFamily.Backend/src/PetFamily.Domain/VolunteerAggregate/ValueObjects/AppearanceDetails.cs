@@ -1,4 +1,4 @@
-﻿using CSharpFunctionalExtensions;
+﻿using PetFamily.Domain.Shared.Models;
 using PetFamily.Domain.SpeciesAggregate.ValueObjects.Ids;
 
 namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
@@ -22,27 +22,27 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
             Height = height;
         }
 
-        public static Result<AppearanceDetails> Creeate(SpeciesId speciesId, BreedId breedId, string coloration, float weight, float height)
+        public static Result<AppearanceDetails> Create(SpeciesId speciesId, BreedId breedId, string coloration, float weight, float height)
         {
 
             if (speciesId == null)
-                return Result.Failure<AppearanceDetails>($"The \"speciesId\" argument must not be empty.");
+                return Error.Validation("AppearanceDetails.Create.Invalid", $"The \"speciesId\" argument must not be empty.");
 
             if (breedId == null)
-                return Result.Failure<AppearanceDetails>($"The \"breedId\" argument must not be empty.");
+                return Error.Validation("AppearanceDetails.Create.Invalid", $"The \"breedId\" argument must not be empty.");
 
             if (string.IsNullOrWhiteSpace(coloration) || coloration.Length > COLORATION_MAX_LENGTH)
-                return Result.Failure<AppearanceDetails>($"The \"coloration\" argument must not be empty and must consist of no more than {COLORATION_MAX_LENGTH} characters.");
+                return Error.Validation("AppearanceDetails.Create.Invalid", $"The \"coloration\" argument must not be empty and must consist of no more than {COLORATION_MAX_LENGTH} characters.");
 
             if (weight <= 0)
-                return Result.Failure<AppearanceDetails>($"The \"weight\" argument must be greater than zero.");
+                return Error.Validation("AppearanceDetails.Create.Invalid", $"The \"weight\" argument must be greater than zero.");
 
             if (height <= 0)
-                return Result.Failure<AppearanceDetails>($"The \"height\" argument must be greater than zero.");
+                return Error.Validation("AppearanceDetails.Create.Invalid", $"The \"height\" argument must be greater than zero.");
 
             var appearanceDetails = new AppearanceDetails(speciesId, breedId, coloration, weight, height);
 
-            return Result.Success(appearanceDetails);
+            return appearanceDetails;
         }
     }
 }

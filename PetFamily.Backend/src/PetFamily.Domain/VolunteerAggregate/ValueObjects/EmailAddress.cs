@@ -1,5 +1,5 @@
-﻿using CSharpFunctionalExtensions;
-using CSharpFunctionalExtensions.ValueTasks;
+﻿using PetFamily.Domain.Shared.Models;
+
 namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
 {
     public record EmailAddress
@@ -23,12 +23,12 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
         public static Result<EmailAddress> Parse(string email)
         {
             if(string.IsNullOrWhiteSpace(email) || email.Length > EMAIL_MAX_LENGTH)
-                return Result.Failure<EmailAddress>($"The \"email\" argument must not be empty and must consist of no more than {EMAIL_MAX_LENGTH} characters.");
+                return Error.Validation("EmailAddress.Parse.Invalid", $"The \"email\" argument must not be empty and must consist of no more than {EMAIL_MAX_LENGTH} characters.");
 
             var strs = email.Split('@');
 
             if (strs.Length != 2)
-                return Result.Failure<EmailAddress>("Invalid email address");
+                return Error.Validation("EmailAddress.Parse.Invalid", "Invalid email address");
 
             return Create(strs[0], strs[1]);
         }
@@ -36,14 +36,14 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
         public static Result<EmailAddress> Create(string userName, string domainName)
         {
             if (string.IsNullOrWhiteSpace(userName) || userName.Length > EMAIL_USER_NAME_LENGTH)
-                return Result.Failure<EmailAddress>($"The \"userName\" argument must not be empty and must consist of no more than {EMAIL_USER_NAME_LENGTH} characters.");
+                return Error.Validation("EmailAddress.Create.Invalid", $"The \"userName\" argument must not be empty and must consist of no more than {EMAIL_USER_NAME_LENGTH} characters.");
 
             if (string.IsNullOrWhiteSpace(domainName) || domainName.Length > EMAIL_DOMAIN_NAME_LENGTH)
-                return Result.Failure<EmailAddress>($"The \"domainName\" argument must not be empty and must consist of no more than {EMAIL_DOMAIN_NAME_LENGTH} characters.");
+                return Error.Validation("EmailAddress.Create.Invalid", $"The \"domainName\" argument must not be empty and must consist of no more than {EMAIL_DOMAIN_NAME_LENGTH} characters.");
 
             var address = new EmailAddress(userName, domainName);
 
-            return Result.Success(address);
+            return address;
         }
     }
 }

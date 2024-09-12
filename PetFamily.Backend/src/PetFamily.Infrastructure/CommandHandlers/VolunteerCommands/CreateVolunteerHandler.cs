@@ -1,6 +1,6 @@
-﻿using CSharpFunctionalExtensions;
-using PetFamily.Application.Commands.Volunteer.Create;
+﻿using PetFamily.Application.Commands.Volunteer.Create;
 using PetFamily.Application.Interfaces.Repositories;
+using PetFamily.Domain.Shared.Models;
 using PetFamily.Domain.VolunteerAggregate;
 using PetFamily.Domain.VolunteerAggregate.Entities;
 using PetFamily.Domain.VolunteerAggregate.ValueObjects;
@@ -11,12 +11,12 @@ namespace PetFamily.Infrastructure.CommandHandlers.VolunteerCommands
     internal class CreateVolunteerHandler : ICreateVolunteerHandler
     {
         private readonly PetFamilyDbContext _dbContext;
-        private readonly IVolunteerRepositoriy _repositoriy;
+        private readonly IVolunteerRepositoriy _repository;
 
-        public CreateVolunteerHandler(PetFamilyDbContext dbContext, IVolunteerRepositoriy repositoriy)
+        public CreateVolunteerHandler(PetFamilyDbContext dbContext, IVolunteerRepositoriy repository)
         {
             _dbContext = dbContext;
-            _repositoriy = repositoriy;
+            _repository = repository;
         }
 
         public async Task<Result<Guid>> Handle(CreateVolunteerCommand command, CancellationToken cancellationToken)
@@ -24,18 +24,18 @@ namespace PetFamily.Infrastructure.CommandHandlers.VolunteerCommands
             var fullname = FullName.Create(command.Firstname, command.Lastname, command.Patronymic);
 
             if (fullname.IsFailure)
-                return Result.Failure<Guid>(fullname.Error);
+                return fullname.Error;
 
             var email = EmailAddress.Parse(command.Email);
 
             if (email.IsFailure)
-                return Result.Failure<Guid>(email.Error);
+                return email.Error;
 
-            if (await _repositoriy.EmailExists(email.Value, cancellationToken))
-                return Result.Failure<Guid>("A volunteer with this email address already exists.");
+            if (await _repository.EmailExists(email.Value, cancellationToken))
+                return Error.Conflict("CreateVolunteer.Email.Exists", "A volunteer with this email address already exists.");
 
-            if (await _repositoriy.PhoneNumberExists(command.PhoneNumber, cancellationToken))
-                return Result.Failure<Guid>("A volunteer with this phone number already exists.");
+            if (await _repository.PhoneNumberExists(command.PhoneNumber, cancellationToken))
+                return Error.Conflict("CreateVolunteer.Phone.Exists", "A volunteer with this phone number already exists.");
 
             var socialNetworks = new List<Result<SocialNetwork>>();
 
@@ -48,10 +48,10 @@ namespace PetFamily.Infrastructure.CommandHandlers.VolunteerCommands
                 foreach (var item in socialNetworks)
                 {
                     if (item.IsFailure)
-                        return Result.Failure<Guid>(item.Error);
+                        return item.Error;
                 }
             }
-            
+
             var requisites =  new List<Result<RequisiteForAssistance>>();
 
             if (command.Requisites != null)
@@ -63,7 +63,7 @@ namespace PetFamily.Infrastructure.CommandHandlers.VolunteerCommands
                 foreach (var item in requisites)
                 {
                     if (item.IsFailure)
-                        return Result.Failure<Guid>(item.Error);
+                        return item.Error;
                 }
             }
             
@@ -78,7 +78,7 @@ namespace PetFamily.Infrastructure.CommandHandlers.VolunteerCommands
                 new List<Pet>());
 
             if (volunteer.IsFailure)
-                return Result.Failure<Guid>(volunteer.Error);
+                return volunteer.Error;
 
             await _dbContext.Volunteers.AddAsync(volunteer.Value, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);

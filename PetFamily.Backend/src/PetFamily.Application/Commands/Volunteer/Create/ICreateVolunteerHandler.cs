@@ -1,4 +1,4 @@
-﻿using CSharpFunctionalExtensions;
+﻿using PetFamily.Domain.Shared.Models;
 
 namespace PetFamily.Application.Commands.Volunteer.Create
 {
