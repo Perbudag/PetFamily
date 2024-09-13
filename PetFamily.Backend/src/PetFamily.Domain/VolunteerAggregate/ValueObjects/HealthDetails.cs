@@ -1,4 +1,4 @@
-﻿using CSharpFunctionalExtensions;
+﻿using PetFamily.Domain.Shared.Models;
 
 namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
 {
@@ -20,11 +20,11 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
         public static Result<HealthDetails> Create(string description, bool isCastrated = false, bool isVaccinated = false)
         {
             if (string.IsNullOrWhiteSpace(description) || description.Length > DESCRIPTION_MAX_LENGTH)
-                return Result.Failure<HealthDetails>($"The \"description\" argument must not be empty and must consist of no more than {DESCRIPTION_MAX_LENGTH} characters.");
+                return Error.Validation("HealthDetails.Create.Invalid", $"The \"description\" argument must not be empty and must consist of no more than {DESCRIPTION_MAX_LENGTH} characters.");
 
             var healthDetails = new HealthDetails(description, isCastrated, isVaccinated);
 
-            return Result.Success(healthDetails);
+            return healthDetails;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using CSharpFunctionalExtensions;
+﻿using PetFamily.Domain.Shared.Models;
 
 namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
 {
@@ -40,12 +40,12 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
         public static Result<MapAddress> Parse(string address)
         {
             if (string.IsNullOrWhiteSpace(address) || address.Length > ADDRESS_MAX_LENGTH)
-                return Result.Failure<MapAddress>($"The \"address\" argument must not be empty and must consist of no more than {ADDRESS_MAX_LENGTH} characters.");
+                return Error.Validation("MapAddress.Parse.Invalid", $"The \"address\" argument must not be empty and must consist of no more than {ADDRESS_MAX_LENGTH} characters.");
 
             var strs = address.Split(", ");
 
             if (strs.Length < 5 || strs.Length > 6)
-                return Result.Failure<MapAddress>("The \"address\" argument must consist of 5 or 6 elements separated by the string \", \".");
+                return Error.Validation("MapAddress.Parse.Invalid", "The \"address\" argument must consist of 5 or 6 elements separated by the string \", \".");
 
             string country = strs[1];
             string region = strs[2];
@@ -63,20 +63,20 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
         public static Result<MapAddress> Create(string country, string region, string city, string street, int houseNumber, int? apartmentNumber)
         {
             if (string.IsNullOrWhiteSpace(country) || country.Length > ADDRESS_MAX_LENGTH)
-                return Result.Failure<MapAddress>($"The \"country\" argument must not be empty and must consist of no more than {COUNTRY_MAX_LENGTH} characters.");
+                return Error.Validation("MapAddress.Create.Invalid", $"The \"country\" argument must not be empty and must consist of no more than {COUNTRY_MAX_LENGTH} characters.");
 
             if (string.IsNullOrWhiteSpace(region) || region.Length > ADDRESS_MAX_LENGTH)
-                return Result.Failure<MapAddress>($"The \"region\" argument must not be empty and must consist of no more than {REGION_MAX_LENGTH} characters.");
+                return Error.Validation("MapAddress.Create.Invalid", $"The \"region\" argument must not be empty and must consist of no more than {REGION_MAX_LENGTH} characters.");
 
             if (string.IsNullOrWhiteSpace(city) || city.Length > ADDRESS_MAX_LENGTH)
-                return Result.Failure<MapAddress>($"The \"city\" argument must not be empty and must consist of no more than {CITY_MAX_LENGTH} characters.");
+                return Error.Validation("MapAddress.Create.Invalid", $"The \"city\" argument must not be empty and must consist of no more than {CITY_MAX_LENGTH} characters.");
 
             if (string.IsNullOrWhiteSpace(street) || street.Length > ADDRESS_MAX_LENGTH)
-                return Result.Failure<MapAddress>($"The \"street\" argument must not be empty and must consist of no more than {STREET_MAX_LENGTH} characters.");
+                return Error.Validation("MapAddress.Create.Invalid", $"The \"street\" argument must not be empty and must consist of no more than {STREET_MAX_LENGTH} characters.");
 
             var address = new MapAddress(country, region, city, street, houseNumber, apartmentNumber);
 
-            return Result.Success(address);
+            return address;
         }
     }
 }

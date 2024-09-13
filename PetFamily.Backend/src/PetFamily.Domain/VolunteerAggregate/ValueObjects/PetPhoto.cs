@@ -1,4 +1,4 @@
-﻿using CSharpFunctionalExtensions;
+﻿using PetFamily.Domain.Shared.Models;
 
 namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
 {
@@ -16,11 +16,11 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
         public static Result<PetPhoto> Create(string path, bool isMain = false)
         {
             if(string.IsNullOrWhiteSpace(path))
-                return Result.Failure<PetPhoto>($"The \"path\" argument must not be empty.");
+                return Error.Validation("PetPhoto.Create.Invalid", $"The \"path\" argument must not be empty.");
 
             var photo = new PetPhoto(path, isMain);
 
-            return Result.Success(photo);
+            return photo;
         }
     }
 }
