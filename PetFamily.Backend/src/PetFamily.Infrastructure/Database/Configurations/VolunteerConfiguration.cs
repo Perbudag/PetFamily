@@ -4,6 +4,7 @@ using PetFamily.Domain.VolunteerAggregate;
 using PetFamily.Infrastructure.Extensions;
 using PetFamily.Domain.VolunteerAggregate.ValueObjects;
 using PetFamily.Domain.VolunteerAggregate.ValueObjects.Ids;
+using PetFamily.Domain.Shared.ValueObjects;
 
 namespace PetFamily.Infrastructure.Database.Configurations
 {
@@ -44,11 +45,16 @@ namespace PetFamily.Infrastructure.Database.Configurations
 
             builder.Property(v => v.Description)
                 .IsRequired(false)
-                .HasMaxLength(Volunteer.DESCRIPTION_MAX_LENGTH);
+                .HasConversion(
+                    v => v.Value,
+                    v => Description.Create(v).Value)
+                .HasMaxLength(Description.DESCRIPTION_MAX_LENGTH);
 
             builder.Property(we => we.WorkExperience)
                 .IsRequired()
-                .HasDefaultValue(0);
+                .HasConversion(
+                    v => v.Value,
+                    v => WorkExperience.Create(v).Value);
 
             builder.Property(v => v.Email)
                .IsRequired()
@@ -60,7 +66,10 @@ namespace PetFamily.Infrastructure.Database.Configurations
 
             builder.Property(v => v.PhoneNumber)
                 .IsRequired()
-                .HasColumnType($"char({Volunteer.PHONE_NUMBER_LENGTH})");
+               .HasConversion(
+                   e => e.Value,
+                   e => PhoneNumber.Create(e).Value)
+                .HasColumnType($"char({PhoneNumber.PHONE_NUMBER_LENGTH})");
 
 
             builder.ValueObjectListToJson(v => v.SocialNetworks, SocialNetworkBuilder =>
@@ -78,11 +87,11 @@ namespace PetFamily.Infrastructure.Database.Configurations
             {
                 RequisitesBuilder.Property(r => r.Title)
                 .IsRequired()
-                .HasMaxLength(RequisiteForAssistance.TITLE_MAX_LENGTH);
+                .HasMaxLength(Requisite.TITLE_MAX_LENGTH);
 
                 RequisitesBuilder.Property(r => r.Description)
                 .IsRequired()
-                .HasMaxLength(RequisiteForAssistance.DESCRIPTION_MAX_LENGTH);
+                .HasMaxLength(Requisite.DESCRIPTION_MAX_LENGTH);
             });
 
 

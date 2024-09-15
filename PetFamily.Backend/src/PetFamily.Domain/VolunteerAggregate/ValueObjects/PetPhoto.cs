@@ -15,8 +15,13 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
 
         public static Result<PetPhoto> Create(string path, bool isMain = false)
         {
+            List<Error> errors = [];
+
             if(string.IsNullOrWhiteSpace(path))
-                return Error.Validation("PetPhoto.Create.Invalid", $"The \"path\" argument must not be empty.");
+                errors.Add(Errors.Validation.NotBeEmpty("petPhoto"));
+
+            if (errors.Count > 0)
+                return errors;
 
             var photo = new PetPhoto(path, isMain);
 

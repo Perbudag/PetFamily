@@ -5,22 +5,22 @@ namespace PetFamily.API.Contracts.Shared
     public record Envelope
     {
         public object? Result { get; }
-        public string? ErrorCode { get; }
-        public string? ErrorMessage { get; }
+        public IEnumerable<ErrorEnvelope>? Errors { get; }
         public DateTime TimeGenerated { get; }
 
-        public Envelope(object? result, Error? error)
+        public Envelope(object? result, List<Error>? errors)
         {
             Result = result;
-            ErrorCode = error?.Code;
-            ErrorMessage = error?.Message;
+            Errors = errors?.Select(e => new ErrorEnvelope(e.Code, e.Message));
             TimeGenerated = DateTime.UtcNow;
         }
 
         public static Envelope Ok(object? result) =>
             new(result, null);
 
-        public static Envelope Error(Error error) =>
+        public static Envelope Error(List<Error> error) =>
             new(null, error);
     }
+
+    public record ErrorEnvelope(string Code, string Message);
 }

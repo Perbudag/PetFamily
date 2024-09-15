@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PetFamily.Application.Interfaces.Repositories;
+using PetFamily.Domain.Shared.ValueObjects;
 using PetFamily.Domain.VolunteerAggregate.ValueObjects;
 
 namespace PetFamily.Infrastructure.Database.Repositories
@@ -17,11 +18,10 @@ namespace PetFamily.Infrastructure.Database.Repositories
         public async Task<bool> EmailExists(EmailAddress address, CancellationToken cancellationToken = default)
         {
             var result = await _context.Volunteers.FirstOrDefaultAsync(v => v.Email == address);
-
             return result is not null;
         }
 
-        public async Task<bool> PhoneNumberExists(string phoneNumber, CancellationToken cancellationToken = default)
+        public async Task<bool> PhoneNumberExists(PhoneNumber phoneNumber, CancellationToken cancellationToken = default)
         {
             var result = await _context.Volunteers.FirstOrDefaultAsync(v => v.PhoneNumber == phoneNumber);
 

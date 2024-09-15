@@ -5,6 +5,7 @@ using PetFamily.Infrastructure.Extensions;
 using PetFamily.Domain.VolunteerAggregate.ValueObjects;
 using PetFamily.Domain.VolunteerAggregate.ValueObjects.Ids;
 using PetFamily.Domain.SpeciesAggregate.ValueObjects.Ids;
+using PetFamily.Domain.Shared.ValueObjects;
 
 namespace PetFamily.Infrastructure.Database.Configurations
 {
@@ -24,11 +25,17 @@ namespace PetFamily.Infrastructure.Database.Configurations
 
             builder.Property(p => p.Name)
                 .IsRequired()
-                .HasMaxLength(Pet.NAME_MAX_LENGTH);
+                .HasConversion(
+                    v => v.Value,
+                    v => Name.Create(v).Value)
+                .HasMaxLength(Name.NAME_MAX_LENGTH);
 
             builder.Property(p => p.Description)
                 .IsRequired(false)
-                .HasMaxLength(Pet.DESCRIPTION_MAX_LENGTH);
+                .HasConversion(
+                    v => v.Value,
+                    v => Description.Create(v).Value)
+                .HasMaxLength(Description.DESCRIPTION_MAX_LENGTH);
 
             builder.ComplexProperty(p => p.AppearanceDetails, b =>
             {
@@ -85,7 +92,10 @@ namespace PetFamily.Infrastructure.Database.Configurations
 
             builder.Property(p => p.PhoneNumber)
                 .IsRequired()
-                .HasColumnType($"char({Pet.PHONE_NUMBER_LENGTH})");
+                .HasConversion(
+                    v => v.Value,
+                    v => PhoneNumber.Create(v).Value)
+                .HasColumnType($"char({PhoneNumber.PHONE_NUMBER_LENGTH})");
 
             builder.Property(p => p.AssistanceStatus)
                 .IsRequired()
@@ -95,11 +105,11 @@ namespace PetFamily.Infrastructure.Database.Configurations
             {
                 RequisitesBuilder.Property(r => r.Title)
                 .IsRequired()
-                .HasMaxLength(RequisiteForAssistance.TITLE_MAX_LENGTH);
+                .HasMaxLength(Requisite.TITLE_MAX_LENGTH);
 
                 RequisitesBuilder.Property(r => r.Description)
                 .IsRequired()
-                .HasMaxLength(RequisiteForAssistance.DESCRIPTION_MAX_LENGTH);
+                .HasMaxLength(Requisite.DESCRIPTION_MAX_LENGTH);
             });
 
             builder.ValueObjectListToJson(p => p.Photos, PhotosBuilder =>
