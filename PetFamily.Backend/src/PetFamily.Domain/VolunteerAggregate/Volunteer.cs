@@ -7,8 +7,10 @@ using PetFamily.Domain.VolunteerAggregate.ValueObjects.Ids;
 
 namespace PetFamily.Domain.VolunteerAggregate
 {
-    public class Volunteer : Shared.Models.Entity<VolunteerId>
+    public class Volunteer : Entity<VolunteerId>
     {
+        private readonly List<Pet> _Pets = [];
+
         public FullName FullName { get; private set; }
         public Description Description { get; private set; }
         public WorkExperience WorkExperience { get; private set; }
@@ -16,7 +18,7 @@ namespace PetFamily.Domain.VolunteerAggregate
         public PhoneNumber PhoneNumber { get; private set; }
         public ValueObjectList<SocialNetwork> SocialNetworks { get; private set; }
         public ValueObjectList<Requisite> Requisites { get; private set; }
-        public ValueObjectList<Pet> Pets { get; private set; }
+        public IReadOnlyList<Pet> Pets => _Pets.AsReadOnly();
 
         public int PetsFoundHomeCount => Pets.Count(p => p.AssistanceStatus == AssistanceStatus.FoundTheHouse);
         public int PetsLookingForHomeCount => Pets.Count(p => p.AssistanceStatus == AssistanceStatus.LookingForAHome);
