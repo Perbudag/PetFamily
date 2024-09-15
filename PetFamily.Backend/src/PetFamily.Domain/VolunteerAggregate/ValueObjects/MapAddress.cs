@@ -42,7 +42,7 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
             List<Error> errors = [];
 
             if (string.IsNullOrWhiteSpace(address) || address.Length > ADDRESS_MAX_LENGTH)
-                errors.Add(Errors.Validation.String.NotBeEmptyAndNotBeLonger("mapAddress", ADDRESS_MAX_LENGTH));
+                errors.Add(Errors.General.Validation.String.NotBeEmptyAndNotBeLonger("mapAddress", ADDRESS_MAX_LENGTH));
 
             if (errors.Count > 0)
                 return errors;
@@ -53,7 +53,7 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
 
             if (strs.Length < 5 || strs.Length > 6)
                 errors.Add(Error.Validation(
-                    "MapAddress" + Errors.Validation.ErrorCode,
+                    "MapAddress" + Errors.General.Validation.ErrorCode,
                     "The address must consist of 5 or 6 lines separated by the string \", \"."));
 
             if (errors.Count > 0)
@@ -78,22 +78,22 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
             List<Error> errors = [];
 
             if (string.IsNullOrWhiteSpace(country) || country.Length > COUNTRY_MAX_LENGTH)
-                errors.Add(Errors.Validation.String.NotBeEmptyAndNotBeLonger("mapAddress.country", COUNTRY_MAX_LENGTH));
+                errors.Add(Errors.General.Validation.String.NotBeEmptyAndNotBeLonger("mapAddress.country", COUNTRY_MAX_LENGTH));
 
 
             if (string.IsNullOrWhiteSpace(region) || region.Length > REGION_MAX_LENGTH)
-                errors.Add(Errors.Validation.String.NotBeEmptyAndNotBeLonger("mapAddress.region", REGION_MAX_LENGTH));
+                errors.Add(Errors.General.Validation.String.NotBeEmptyAndNotBeLonger("mapAddress.region", REGION_MAX_LENGTH));
 
 
             if (string.IsNullOrWhiteSpace(city) || city.Length > CITY_MAX_LENGTH)
-                errors.Add(Errors.Validation.String.NotBeEmptyAndNotBeLonger("mapAddress.city", CITY_MAX_LENGTH));
+                errors.Add(Errors.General.Validation.String.NotBeEmptyAndNotBeLonger("mapAddress.city", CITY_MAX_LENGTH));
 
 
             if (string.IsNullOrWhiteSpace(street) || street.Length > STREET_MAX_LENGTH)
-                errors.Add(Errors.Validation.String.NotBeEmptyAndNotBeLonger("mapAddress.street", STREET_MAX_LENGTH));
+                errors.Add(Errors.General.Validation.String.NotBeEmptyAndNotBeLonger("mapAddress.street", STREET_MAX_LENGTH));
 
             if (houseNumber <= 0)
-                errors.Add(Errors.Validation.Int.MustBeGreaterThanZero("mapAddress.houseNumber"));
+                errors.Add(Errors.General.Validation.Int.MustBeGreaterThanZero("mapAddress.houseNumber"));
 
             if (errors.Count > 0)
                 return errors;

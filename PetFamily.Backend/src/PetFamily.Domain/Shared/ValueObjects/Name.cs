@@ -8,9 +8,9 @@ namespace PetFamily.Domain.Shared.ValueObjects
 
         public string Value { get; }
 
-        private Name(string name)
+        private Name(string value)
         {
-            Value = name;
+            Value = value;
         }
 
         public static Result<Name> Create(string name)
@@ -18,7 +18,7 @@ namespace PetFamily.Domain.Shared.ValueObjects
             List<Error> errors = [];
 
             if (string.IsNullOrWhiteSpace(name) || name.Length > NAME_MAX_LENGTH)
-                errors.Add(Errors.Validation.String.NotBeEmptyAndNotBeLonger("name", NAME_MAX_LENGTH));
+                errors.Add(Errors.General.Validation.String.NotBeEmptyAndNotBeLonger("name", NAME_MAX_LENGTH));
 
             if (errors.Count > 0)
                 return errors;

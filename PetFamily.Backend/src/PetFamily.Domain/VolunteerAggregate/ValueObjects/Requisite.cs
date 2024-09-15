@@ -23,10 +23,10 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
             List<Error> errors = [];
 
             if (string.IsNullOrWhiteSpace(title) || title.Length > TITLE_MAX_LENGTH)
-                errors.Add(Errors.Validation.String.NotBeEmptyAndNotBeLonger("requisite.title", TITLE_MAX_LENGTH));
+                errors.Add(Errors.General.Validation.String.NotBeEmptyAndNotBeLonger("requisite.title", TITLE_MAX_LENGTH));
             
             if(string.IsNullOrWhiteSpace(description) || description.Length > DESCRIPTION_MAX_LENGTH)
-                errors.Add(Errors.Validation.String.NotBeEmptyAndNotBeLonger("requisite.description", DESCRIPTION_MAX_LENGTH));
+                errors.Add(Errors.General.Validation.String.NotBeEmptyAndNotBeLonger("requisite.description", DESCRIPTION_MAX_LENGTH));
 
             if (errors.Count > 0)
                 return errors;

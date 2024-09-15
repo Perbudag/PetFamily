@@ -18,7 +18,7 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
             List<Error> errors = [];
 
             if(string.IsNullOrWhiteSpace(path))
-                errors.Add(Errors.Validation.NotBeEmpty("petPhoto"));
+                errors.Add(Errors.General.Validation.NotBeEmpty("petPhoto"));
 
             if (errors.Count > 0)
                 return errors;

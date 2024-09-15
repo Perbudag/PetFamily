@@ -21,10 +21,10 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
             List<Error> errors = [];
 
             if(string.IsNullOrWhiteSpace(name) || name.Length > NAME_MAX_LENGTH)
-                errors.Add(Errors.Validation.String.NotBeEmptyAndNotBeLonger("socialNetwork.name", NAME_MAX_LENGTH));
+                errors.Add(Errors.General.Validation.String.NotBeEmptyAndNotBeLonger("socialNetwork.name", NAME_MAX_LENGTH));
 
             if(string.IsNullOrWhiteSpace(path) || path.Length > PATH_MAX_LENGTH)
-                errors.Add(Errors.Validation.String.NotBeEmptyAndNotBeLonger("socialNetwork.path", PATH_MAX_LENGTH));
+                errors.Add(Errors.General.Validation.String.NotBeEmptyAndNotBeLonger("socialNetwork.path", PATH_MAX_LENGTH));
 
             if (errors.Count > 0)
                 return errors;

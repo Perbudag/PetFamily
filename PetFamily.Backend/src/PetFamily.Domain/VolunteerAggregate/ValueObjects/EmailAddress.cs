@@ -25,7 +25,7 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
             List<Error> errors = [];
 
             if(string.IsNullOrWhiteSpace(email) || email.Length > EMAIL_MAX_LENGTH)
-                errors.Add(Errors.Validation.String.NotBeEmptyAndNotBeLonger("email", EMAIL_MAX_LENGTH));
+                errors.Add(Errors.General.Validation.String.NotBeEmptyAndNotBeLonger("email", EMAIL_MAX_LENGTH));
 
             if (errors.Count > 0)
                 return errors;
@@ -36,7 +36,7 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
 
             if (strs.Length != 2)
                 errors.Add(Error.Validation(
-                    "Email" + Errors.Validation.ErrorCode,
+                    "Email" + Errors.General.Validation.ErrorCode,
                     "The email address must consist of 2 lines separated by the '@' character"));
 
             if (errors.Count > 0)
@@ -52,12 +52,12 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
 
             if (string.IsNullOrWhiteSpace(userName) || userName.Length > EMAIL_USER_NAME_LENGTH)
                 errors.Add(Error.Validation(
-                    "Email" + Errors.Validation.ErrorCode,
+                    "Email" + Errors.General.Validation.ErrorCode,
                     $"The line before the '@' character of the email address should not be empty and should not be longer than {EMAIL_USER_NAME_LENGTH} characters"));
 
             if (string.IsNullOrWhiteSpace(domainName) || domainName.Length > EMAIL_DOMAIN_NAME_LENGTH)
                 errors.Add(Error.Validation(
-                    "Email" + Errors.Validation.ErrorCode,
+                    "Email" + Errors.General.Validation.ErrorCode,
                     $"The line after the '@' character in the email address should not be empty and contain no more than {EMAIL_DOMAIN_NAME_LENGTH} characters"));
 
             if (errors.Count > 0)

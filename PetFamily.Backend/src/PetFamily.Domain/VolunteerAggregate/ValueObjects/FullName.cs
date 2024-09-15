@@ -25,13 +25,13 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
             List<Error> errors = [];
 
             if(string.IsNullOrWhiteSpace(firstname) || firstname.Length > FIRSTNAME_MAX_LENGTH)
-                errors.Add(Errors.Validation.String.NotBeEmptyAndNotBeLonger("firstname", FIRSTNAME_MAX_LENGTH));
+                errors.Add(Errors.General.Validation.String.NotBeEmptyAndNotBeLonger("firstname", FIRSTNAME_MAX_LENGTH));
 
             if(string.IsNullOrWhiteSpace(lastname) || lastname.Length > LASTNAME_MAX_LENGTH)
-                errors.Add(Errors.Validation.String.NotBeEmptyAndNotBeLonger("lastname", LASTNAME_MAX_LENGTH));
+                errors.Add(Errors.General.Validation.String.NotBeEmptyAndNotBeLonger("lastname", LASTNAME_MAX_LENGTH));
 
             if(patronymic.Length > PATRONYMIC_MAX_LENGTH)
-                errors.Add(Errors.Validation.String.NotBeLonger("patronymic", PATRONYMIC_MAX_LENGTH));
+                errors.Add(Errors.General.Validation.String.NotBeLonger("patronymic", PATRONYMIC_MAX_LENGTH));
 
             if (errors.Count > 0)
                 return errors;

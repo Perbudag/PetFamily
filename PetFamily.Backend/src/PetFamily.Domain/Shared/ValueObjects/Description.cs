@@ -8,9 +8,9 @@ namespace PetFamily.Domain.Shared.ValueObjects
 
         public string Value { get; }
 
-        private Description(string description)
+        private Description(string value)
         {
-            Value = description;
+            Value = value;
         }
 
         public static Result<Description> Create(string description)
@@ -18,7 +18,7 @@ namespace PetFamily.Domain.Shared.ValueObjects
             List<Error> errors = [];
 
             if (description.Length > DESCRIPTION_MAX_LENGTH)
-                errors.Add(Errors.Validation.String.NotBeLonger("description", DESCRIPTION_MAX_LENGTH));
+                errors.Add(Errors.General.Validation.String.NotBeLonger("description", DESCRIPTION_MAX_LENGTH));
 
             if (errors.Count > 0)
                 return errors;

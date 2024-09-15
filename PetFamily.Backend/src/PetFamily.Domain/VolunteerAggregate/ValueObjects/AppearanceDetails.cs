@@ -27,19 +27,19 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
             List<Error> errors = [];
 
             if (speciesId == null)
-                errors.Add(Errors.Validation.NotBeEmpty("speciesId"));
+                errors.Add(Errors.General.Validation.NotBeEmpty("speciesId"));
 
             if (breedId == null)
-                errors.Add(Errors.Validation.NotBeEmpty("breedId"));
+                errors.Add(Errors.General.Validation.NotBeEmpty("breedId"));
 
             if (string.IsNullOrWhiteSpace(coloration) || coloration.Length > COLORATION_MAX_LENGTH)
-                errors.Add(Errors.Validation.String.NotBeEmptyAndNotBeLonger("coloration", COLORATION_MAX_LENGTH));
+                errors.Add(Errors.General.Validation.String.NotBeEmptyAndNotBeLonger("coloration", COLORATION_MAX_LENGTH));
 
             if (weight <= 0)
-                errors.Add(Errors.Validation.Int.MustBeGreaterThanZero("weight"));
+                errors.Add(Errors.General.Validation.Int.MustBeGreaterThanZero("weight"));
 
             if (height <= 0)
-                errors.Add(Errors.Validation.Int.MustBeGreaterThanZero("height"));
+                errors.Add(Errors.General.Validation.Int.MustBeGreaterThanZero("height"));
 
             if (errors.Count > 0)
                 return errors;

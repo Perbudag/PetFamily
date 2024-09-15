@@ -43,18 +43,23 @@ namespace PetFamily.Infrastructure.Database.Configurations
             });
 
 
-            builder.Property(v => v.Description)
+            builder.ComplexProperty(v => v.Description, b =>
+            {
+                b.Property(d => d.Value)
+                .HasColumnName("description")
                 .IsRequired(false)
-                .HasConversion(
-                    v => v.Value,
-                    v => Description.Create(v).Value)
                 .HasMaxLength(Description.DESCRIPTION_MAX_LENGTH);
+            });
 
-            builder.Property(we => we.WorkExperience)
+
+            builder.ComplexProperty(v => v.WorkExperience, b =>
+            {
+                b.Property(we => we.Value)
+                .HasColumnName("work_experience")
                 .IsRequired()
-                .HasConversion(
-                    v => v.Value,
-                    v => WorkExperience.Create(v).Value);
+                .HasDefaultValue(0);
+            });
+
 
             builder.Property(v => v.Email)
                .IsRequired()
@@ -64,12 +69,13 @@ namespace PetFamily.Infrastructure.Database.Configurations
                .HasMaxLength(EmailAddress.EMAIL_MAX_LENGTH);
 
 
-            builder.Property(v => v.PhoneNumber)
+            builder.ComplexProperty(v => v.PhoneNumber, b =>
+            {
+                b.Property(v => v.Value)
+                .HasColumnName("phone_number")
                 .IsRequired()
-               .HasConversion(
-                   e => e.Value,
-                   e => PhoneNumber.Create(e).Value)
                 .HasColumnType($"char({PhoneNumber.PHONE_NUMBER_LENGTH})");
+            });
 
 
             builder.ValueObjectListToJson(v => v.SocialNetworks, SocialNetworkBuilder =>
@@ -93,6 +99,7 @@ namespace PetFamily.Infrastructure.Database.Configurations
                 .IsRequired()
                 .HasMaxLength(Requisite.DESCRIPTION_MAX_LENGTH);
             });
+
 
 
             builder.HasMany(v => v.Pets)

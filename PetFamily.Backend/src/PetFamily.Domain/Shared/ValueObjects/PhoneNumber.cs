@@ -1,4 +1,5 @@
 ﻿using PetFamily.Domain.Shared.Models;
+using System.Text.RegularExpressions;
 
 namespace PetFamily.Domain.Shared.ValueObjects
 {
@@ -8,29 +9,18 @@ namespace PetFamily.Domain.Shared.ValueObjects
 
         public string Value { get; }
 
-        private PhoneNumber(string phoneNumber)
+        private PhoneNumber(string value)
         {
-            Value = phoneNumber;
+            Value = value;
         }
 
         public static Result<PhoneNumber> Create(string phoneNumber)
         {
             List<Error> errors = [];
 
-            try
-            {
-                var x = long.Parse(phoneNumber);
-
-                phoneNumber = x.ToString();
-
-                if (phoneNumber.Length != PHONE_NUMBER_LENGTH)
-                    errors.Add(Error.Validation("phoneNumber" + Errors.Validation.ErrorCode, $"The \"phoneNumber\" field must contain {PHONE_NUMBER_LENGTH} digits."));
-
-            }
-            catch
-            {
-                errors.Add(Error.Validation("phoneNumber" + Errors.Validation.ErrorCode, $"The \"phoneNumber\" field must contain {PHONE_NUMBER_LENGTH} digits."));
-            }
+            
+            if (phoneNumber.Length != PHONE_NUMBER_LENGTH || !Regex.IsMatch(phoneNumber, @"^[0-9]+$"))
+                errors.Add(Error.Validation("phoneNumber" + Errors.General.Validation.ErrorCode, $"The \"phoneNumber\" field must contain {PHONE_NUMBER_LENGTH} digits."));
 
 
             if (errors.Count > 0)
