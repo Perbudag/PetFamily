@@ -21,7 +21,10 @@ namespace PetFamily.Infrastructure.CommandHandlers.VolunteerCommands
 
         public async Task<Result<Guid>> Handle(CreateVolunteerCommand command, CancellationToken cancellationToken)
         {
-            var fullname = FullName.Create(command.Firstname, command.Lastname, command.Patronymic).Value;
+            var fullname = FullName.Create(
+                command.Fullname.Firstname,
+                command.Fullname.Lastname,
+                command.Fullname.Patronymic).Value;
 
             var description = Description.Create(command.Description).Value;
 

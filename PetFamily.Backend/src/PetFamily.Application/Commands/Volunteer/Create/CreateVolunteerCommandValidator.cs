@@ -9,7 +9,7 @@ namespace PetFamily.Application.Commands.Volunteer.Create
     {
         public CreateVolunteerCommandValidator()
         {
-            RuleFor(c => new { c.Firstname, c.Lastname, c.Patronymic })
+            RuleFor(c => c.Fullname)
                 .MustBeValueObject(v => FullName.Create(v.Firstname, v.Lastname, v.Patronymic));
 
             RuleFor(c => c.Description).MustBeValueObject(Description.Create);
