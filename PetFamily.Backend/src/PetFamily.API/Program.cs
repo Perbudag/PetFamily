@@ -1,5 +1,6 @@
 using PetFamily.API;
 using PetFamily.API.Extensions;
+using PetFamily.API.Middlewares;
 using PetFamily.Application;
 using PetFamily.Infrastructure;
 using Serilog;
@@ -11,6 +12,8 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApi(builder.Configuration);
 
 var app = builder.Build();
+
+app.UseExceptionMiddleware();
 
 app.UseSerilogRequestLogging();
 
