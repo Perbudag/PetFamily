@@ -1,4 +1,5 @@
-﻿using PetFamily.Application.Commands.Volunteer.Create;
+﻿using Microsoft.Extensions.Logging;
+using PetFamily.Application.Commands.Volunteer.Create;
 using PetFamily.Application.Interfaces.Repositories;
 using PetFamily.Domain.Shared.Models;
 using PetFamily.Domain.Shared.ValueObjects;
@@ -12,11 +13,13 @@ namespace PetFamily.Infrastructure.CommandHandlers.VolunteerCommands
     {
         private readonly PetFamilyDbContext _dbContext;
         private readonly IVolunteerRepositoriy _repository;
+        private readonly ILogger<CreateVolunteerHandler> _logger;
 
-        public CreateVolunteerHandler(PetFamilyDbContext dbContext, IVolunteerRepositoriy repository)
+        public CreateVolunteerHandler(PetFamilyDbContext dbContext, IVolunteerRepositoriy repository, ILogger<CreateVolunteerHandler> logger)
         {
             _dbContext = dbContext;
             _repository = repository;
+            _logger = logger;
         }
 
         public async Task<Result<Guid>> Handle(CreateVolunteerCommand command, CancellationToken cancellationToken)
@@ -80,7 +83,9 @@ namespace PetFamily.Infrastructure.CommandHandlers.VolunteerCommands
 
             await _dbContext.Volunteers.AddAsync(volunteer, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
-                
+
+            _logger.LogInformation("The volunteer was created with the ID: {volunteerId}", volunteer.Id.Value);
+
             return volunteer.Id.Value;
         }
     }
