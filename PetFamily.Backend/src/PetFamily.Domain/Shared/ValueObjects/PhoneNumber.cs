@@ -20,7 +20,7 @@ namespace PetFamily.Domain.Shared.ValueObjects
 
             
             if (phoneNumber.Length != PHONE_NUMBER_LENGTH || !Regex.IsMatch(phoneNumber, @"^[0-9]+$"))
-                errors.Add(Error.Validation("phoneNumber" + Errors.General.Validation.ErrorCode, $"The \"phoneNumber\" field must contain {PHONE_NUMBER_LENGTH} digits."));
+                errors.Add(Error.Validation("PhoneNumber" + Errors.General.Validation.ErrorCode, $"The \"phoneNumber\" field must contain {PHONE_NUMBER_LENGTH} digits."));
 
 
             if (errors.Count > 0)

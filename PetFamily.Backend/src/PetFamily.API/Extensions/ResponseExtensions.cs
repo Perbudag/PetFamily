@@ -6,14 +6,19 @@ namespace PetFamily.API.Extensions
 {
     public static class ResponseExtensions
     {
-        public static ActionResult<T> ToResponse<T>(this Result<T> result)
+        public static ActionResult<T> ToResponse<T>(this Result<T> result, int successStatusCode = StatusCodes.Status200OK)
         {
             if(result.IsSuccess)
-                return new OkObjectResult(Envelope.Ok(result.Value));
+                return new ObjectResult(Envelope.Ok(result.Value))
+                {
+                    StatusCode = successStatusCode
+                };
 
             var statusCode = GetStatusCodeForErrorType(result.Errors[0].Type);
 
-            var envelope = Envelope.Error(result.Errors);
+            var responseErrors = result.Errors.Select(e => new ResponseError(e.Code, e.Message, null));
+
+            var envelope = Envelope.Error(responseErrors);
 
             return new ObjectResult(envelope)
             {

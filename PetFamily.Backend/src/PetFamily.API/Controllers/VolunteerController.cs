@@ -15,9 +15,10 @@ namespace PetFamily.API.Controllers
             [FromBody] CreateVolunteerCommand command,
             CancellationToken cancellationToken)
         {
+
             var result = await createVolunteer.Handle(command, cancellationToken);
 
-            return result.ToResponse();
+            return result.ToResponse(StatusCodes.Status201Created);
         }
     }
 }
