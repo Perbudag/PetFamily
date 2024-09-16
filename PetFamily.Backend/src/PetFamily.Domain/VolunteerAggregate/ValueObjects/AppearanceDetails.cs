@@ -24,23 +24,27 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
 
         public static Result<AppearanceDetails> Create(SpeciesId speciesId, BreedId breedId, string coloration, float weight, float height)
         {
+            List<Error> errors = [];
 
             if (speciesId == null)
-                return Error.Validation("AppearanceDetails.Create.Invalid", $"The \"speciesId\" argument must not be empty.");
+                errors.Add(Errors.General.Validation.NotBeEmpty("speciesId"));
 
             if (breedId == null)
-                return Error.Validation("AppearanceDetails.Create.Invalid", $"The \"breedId\" argument must not be empty.");
+                errors.Add(Errors.General.Validation.NotBeEmpty("breedId"));
 
             if (string.IsNullOrWhiteSpace(coloration) || coloration.Length > COLORATION_MAX_LENGTH)
-                return Error.Validation("AppearanceDetails.Create.Invalid", $"The \"coloration\" argument must not be empty and must consist of no more than {COLORATION_MAX_LENGTH} characters.");
+                errors.Add(Errors.General.Validation.String.NotBeEmptyAndNotBeLonger("coloration", COLORATION_MAX_LENGTH));
 
             if (weight <= 0)
-                return Error.Validation("AppearanceDetails.Create.Invalid", $"The \"weight\" argument must be greater than zero.");
+                errors.Add(Errors.General.Validation.Int.MustBeGreaterThanZero("weight"));
 
             if (height <= 0)
-                return Error.Validation("AppearanceDetails.Create.Invalid", $"The \"height\" argument must be greater than zero.");
+                errors.Add(Errors.General.Validation.Int.MustBeGreaterThanZero("height"));
 
-            var appearanceDetails = new AppearanceDetails(speciesId, breedId, coloration, weight, height);
+            if (errors.Count > 0)
+                return errors;
+
+            var appearanceDetails = new AppearanceDetails(speciesId!, breedId!, coloration, weight, height);
 
             return appearanceDetails;
         }

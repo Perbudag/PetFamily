@@ -5,6 +5,7 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
     public record SocialNetwork
     {
         public const int NAME_MAX_LENGTH = 100;
+        public const int PATH_MAX_LENGTH = 300;
 
         public string Name { get; }
         public string Path { get; }
@@ -17,11 +18,16 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
 
         public static Result<SocialNetwork> Create(string name, string path)
         {
-            if(string.IsNullOrWhiteSpace(name) || name.Length > NAME_MAX_LENGTH)
-                return Error.Validation("SocialNetwork.Create.Invalid", $"The \"name\" argument must not be empty and must consist of no more than {NAME_MAX_LENGTH} characters.");
+            List<Error> errors = [];
 
-            if(string.IsNullOrWhiteSpace(path))
-                return Error.Validation("SocialNetwork.Create.Invalid", $"The \"path\" argument must not be empty.");
+            if(string.IsNullOrWhiteSpace(name) || name.Length > NAME_MAX_LENGTH)
+                errors.Add(Errors.General.Validation.String.NotBeEmptyAndNotBeLonger("socialNetwork.name", NAME_MAX_LENGTH));
+
+            if(string.IsNullOrWhiteSpace(path) || path.Length > PATH_MAX_LENGTH)
+                errors.Add(Errors.General.Validation.String.NotBeEmptyAndNotBeLonger("socialNetwork.path", PATH_MAX_LENGTH));
+
+            if (errors.Count > 0)
+                return errors;
 
             var network = new SocialNetwork(name, path);
 

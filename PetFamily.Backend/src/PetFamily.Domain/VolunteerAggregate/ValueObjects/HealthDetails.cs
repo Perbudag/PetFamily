@@ -19,8 +19,13 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
 
         public static Result<HealthDetails> Create(string description, bool isCastrated = false, bool isVaccinated = false)
         {
+            List<Error> errors = [];
+
             if (string.IsNullOrWhiteSpace(description) || description.Length > DESCRIPTION_MAX_LENGTH)
-                return Error.Validation("HealthDetails.Create.Invalid", $"The \"description\" argument must not be empty and must consist of no more than {DESCRIPTION_MAX_LENGTH} characters.");
+                errors.Add(Errors.General.Validation.String.NotBeEmptyAndNotBeLonger("description", DESCRIPTION_MAX_LENGTH));
+
+            if (errors.Count > 0)
+                return errors;
 
             var healthDetails = new HealthDetails(description, isCastrated, isVaccinated);
 

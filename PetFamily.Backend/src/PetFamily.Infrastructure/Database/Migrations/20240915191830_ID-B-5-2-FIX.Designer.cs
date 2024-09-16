@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PetFamily.Infrastructure.Database;
@@ -12,9 +13,11 @@ using PetFamily.Infrastructure.Database;
 namespace PetFamily.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(PetFamilyDbContext))]
-    partial class PetFamilyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240915191830_ID-B-5-2-FIX")]
+    partial class IDB52FIX
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

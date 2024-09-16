@@ -4,6 +4,7 @@ using PetFamily.Domain.VolunteerAggregate;
 using PetFamily.Infrastructure.Extensions;
 using PetFamily.Domain.VolunteerAggregate.ValueObjects;
 using PetFamily.Domain.VolunteerAggregate.ValueObjects.Ids;
+using PetFamily.Domain.Shared.ValueObjects;
 
 namespace PetFamily.Infrastructure.Database.Configurations
 {
@@ -42,13 +43,23 @@ namespace PetFamily.Infrastructure.Database.Configurations
             });
 
 
-            builder.Property(v => v.Description)
+            builder.ComplexProperty(v => v.Description, b =>
+            {
+                b.Property(d => d.Value)
+                .HasColumnName("description")
                 .IsRequired(false)
-                .HasMaxLength(Volunteer.DESCRIPTION_MAX_LENGTH);
+                .HasMaxLength(Description.DESCRIPTION_MAX_LENGTH);
+            });
 
-            builder.Property(we => we.WorkExperience)
+
+            builder.ComplexProperty(v => v.WorkExperience, b =>
+            {
+                b.Property(we => we.Value)
+                .HasColumnName("work_experience")
                 .IsRequired()
                 .HasDefaultValue(0);
+            });
+
 
             builder.Property(v => v.Email)
                .IsRequired()
@@ -58,9 +69,13 @@ namespace PetFamily.Infrastructure.Database.Configurations
                .HasMaxLength(EmailAddress.EMAIL_MAX_LENGTH);
 
 
-            builder.Property(v => v.PhoneNumber)
+            builder.ComplexProperty(v => v.PhoneNumber, b =>
+            {
+                b.Property(v => v.Value)
+                .HasColumnName("phone_number")
                 .IsRequired()
-                .HasColumnType($"char({Volunteer.PHONE_NUMBER_LENGTH})");
+                .HasColumnType($"char({PhoneNumber.PHONE_NUMBER_LENGTH})");
+            });
 
 
             builder.ValueObjectListToJson(v => v.SocialNetworks, SocialNetworkBuilder =>
@@ -78,12 +93,13 @@ namespace PetFamily.Infrastructure.Database.Configurations
             {
                 RequisitesBuilder.Property(r => r.Title)
                 .IsRequired()
-                .HasMaxLength(RequisiteForAssistance.TITLE_MAX_LENGTH);
+                .HasMaxLength(Requisite.TITLE_MAX_LENGTH);
 
                 RequisitesBuilder.Property(r => r.Description)
                 .IsRequired()
-                .HasMaxLength(RequisiteForAssistance.DESCRIPTION_MAX_LENGTH);
+                .HasMaxLength(Requisite.DESCRIPTION_MAX_LENGTH);
             });
+
 
 
             builder.HasMany(v => v.Pets)

@@ -11,9 +11,9 @@ namespace PetFamily.API.Extensions
             if(result.IsSuccess)
                 return new OkObjectResult(Envelope.Ok(result.Value));
 
-            var statusCode = GetStatusCodeForErrorType(result.Error.Type);
+            var statusCode = GetStatusCodeForErrorType(result.Errors[0].Type);
 
-            var envelope = Envelope.Error(result.Error);
+            var envelope = Envelope.Error(result.Errors);
 
             return new ObjectResult(envelope)
             {

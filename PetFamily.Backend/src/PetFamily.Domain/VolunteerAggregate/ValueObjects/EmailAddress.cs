@@ -22,24 +22,46 @@ namespace PetFamily.Domain.VolunteerAggregate.ValueObjects
         
         public static Result<EmailAddress> Parse(string email)
         {
+            List<Error> errors = [];
+
             if(string.IsNullOrWhiteSpace(email) || email.Length > EMAIL_MAX_LENGTH)
-                return Error.Validation("EmailAddress.Parse.Invalid", $"The \"email\" argument must not be empty and must consist of no more than {EMAIL_MAX_LENGTH} characters.");
+                errors.Add(Errors.General.Validation.String.NotBeEmptyAndNotBeLonger("email", EMAIL_MAX_LENGTH));
+
+            if (errors.Count > 0)
+                return errors;
+
 
             var strs = email.Split('@');
 
+
             if (strs.Length != 2)
-                return Error.Validation("EmailAddress.Parse.Invalid", "Invalid email address");
+                errors.Add(Error.Validation(
+                    "Email" + Errors.General.Validation.ErrorCode,
+                    "The email address must consist of 2 lines separated by the '@' character"));
+
+            if (errors.Count > 0)
+                return errors;
+
 
             return Create(strs[0], strs[1]);
         }
 
         public static Result<EmailAddress> Create(string userName, string domainName)
         {
+            List<Error> errors = [];
+
             if (string.IsNullOrWhiteSpace(userName) || userName.Length > EMAIL_USER_NAME_LENGTH)
-                return Error.Validation("EmailAddress.Create.Invalid", $"The \"userName\" argument must not be empty and must consist of no more than {EMAIL_USER_NAME_LENGTH} characters.");
+                errors.Add(Error.Validation(
+                    "Email" + Errors.General.Validation.ErrorCode,
+                    $"The line before the '@' character of the email address should not be empty and should not be longer than {EMAIL_USER_NAME_LENGTH} characters"));
 
             if (string.IsNullOrWhiteSpace(domainName) || domainName.Length > EMAIL_DOMAIN_NAME_LENGTH)
-                return Error.Validation("EmailAddress.Create.Invalid", $"The \"domainName\" argument must not be empty and must consist of no more than {EMAIL_DOMAIN_NAME_LENGTH} characters.");
+                errors.Add(Error.Validation(
+                    "Email" + Errors.General.Validation.ErrorCode,
+                    $"The line after the '@' character in the email address should not be empty and contain no more than {EMAIL_DOMAIN_NAME_LENGTH} characters"));
+
+            if (errors.Count > 0)
+                return errors;
 
             var address = new EmailAddress(userName, domainName);
 

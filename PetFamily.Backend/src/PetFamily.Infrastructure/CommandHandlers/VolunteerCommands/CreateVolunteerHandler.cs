@@ -1,10 +1,12 @@
 ﻿using PetFamily.Application.Commands.Volunteer.Create;
 using PetFamily.Application.Interfaces.Repositories;
 using PetFamily.Domain.Shared.Models;
+using PetFamily.Domain.Shared.ValueObjects;
 using PetFamily.Domain.VolunteerAggregate;
 using PetFamily.Domain.VolunteerAggregate.Entities;
 using PetFamily.Domain.VolunteerAggregate.ValueObjects;
 using PetFamily.Infrastructure.Database;
+using System.Collections.Generic;
 
 namespace PetFamily.Infrastructure.CommandHandlers.VolunteerCommands
 {
@@ -21,21 +23,17 @@ namespace PetFamily.Infrastructure.CommandHandlers.VolunteerCommands
 
         public async Task<Result<Guid>> Handle(CreateVolunteerCommand command, CancellationToken cancellationToken)
         {
+            List<Error> errors = [];
+
             var fullname = FullName.Create(command.Firstname, command.Lastname, command.Patronymic);
 
-            if (fullname.IsFailure)
-                return fullname.Error;
+            var description = Description.Create(command.Description);
+
+            var workExperience = WorkExperience.Create(command.WorkExperience);
 
             var email = EmailAddress.Parse(command.Email);
 
-            if (email.IsFailure)
-                return email.Error;
-
-            if (await _repository.EmailExists(email.Value, cancellationToken))
-                return Error.Conflict("CreateVolunteer.Email.Exists", "A volunteer with this email address already exists.");
-
-            if (await _repository.PhoneNumberExists(command.PhoneNumber, cancellationToken))
-                return Error.Conflict("CreateVolunteer.Phone.Exists", "A volunteer with this phone number already exists.");
+            var phoneNumber = PhoneNumber.Create(command.PhoneNumber);
 
             var socialNetworks = new List<Result<SocialNetwork>>();
 
@@ -44,46 +42,71 @@ namespace PetFamily.Infrastructure.CommandHandlers.VolunteerCommands
                 socialNetworks = command.SocialNetworks
                 .Select(x => SocialNetwork.Create(x.Name, x.Path))
                 .ToList();
-
-                foreach (var item in socialNetworks)
-                {
-                    if (item.IsFailure)
-                        return item.Error;
-                }
             }
 
-            var requisites =  new List<Result<RequisiteForAssistance>>();
+            var requisites =  new List<Result<Requisite>>();
 
             if (command.Requisites != null)
             {
                 requisites = command.Requisites
-                .Select(x => RequisiteForAssistance.Create(x.Title, x.Description))
+                .Select(x => Requisite.Create(x.Title, x.Description))
                 .ToList();
-
-                foreach (var item in requisites)
-                {
-                    if (item.IsFailure)
-                        return item.Error;
-                }
             }
-            
-            var volunteer = Volunteer.Create(
+
+
+            if (fullname.IsFailure)
+                errors.AddRange(fullname.Errors);
+
+            if (description.IsFailure)
+                errors.AddRange(description.Errors);
+
+            if (workExperience.IsFailure)
+                errors.AddRange(workExperience.Errors);
+
+
+            if (email.IsFailure)
+                errors.AddRange(email.Errors);
+
+            else if (await _repository.EmailExists(email.Value, cancellationToken))
+                errors.Add(Error.Conflict("CreateVolunteer.Email.Exists", "A volunteer with this email address already exists."));
+
+
+            if (phoneNumber.IsFailure)
+                errors.AddRange(phoneNumber.Errors);
+
+            else if (await _repository.PhoneNumberExists(phoneNumber.Value, cancellationToken))
+                errors.Add(Error.Conflict("CreateVolunteer.Phone.Exists", "A volunteer with this phone number already exists."));
+
+
+            foreach (var item in socialNetworks)
+            {
+                if (item.IsFailure)
+                    errors.AddRange(item.Errors);
+            }
+
+            foreach (var item in requisites)
+            {
+                if (item.IsFailure)
+                    errors.AddRange(item.Errors);
+            }
+
+
+            if (errors.Count > 0)
+                return errors;
+
+            var volunteer = new Volunteer(
                 fullname.Value,
-                command.Description,
-                command.WorkExperience,
+                description.Value,
+                workExperience.Value,
                 email.Value,
-                command.PhoneNumber,
+                phoneNumber.Value,
                 socialNetworks.Select(x => x.Value).ToList(),
-                requisites.Select(x => x.Value).ToList(),
-                new List<Pet>());
+                requisites.Select(x => x.Value).ToList());
 
-            if (volunteer.IsFailure)
-                return volunteer.Error;
-
-            await _dbContext.Volunteers.AddAsync(volunteer.Value, cancellationToken);
+            await _dbContext.Volunteers.AddAsync(volunteer, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
                 
-            return volunteer.Value.Id.Value;
+            return volunteer.Id.Value;
         }
     }
 }

@@ -1,39 +1,36 @@
 ﻿using PetFamily.Domain.Shared.Models;
+using PetFamily.Domain.Shared.ValueObjects;
 using PetFamily.Domain.VolunteerAggregate.Enums;
 using PetFamily.Domain.VolunteerAggregate.ValueObjects;
 using PetFamily.Domain.VolunteerAggregate.ValueObjects.Ids;
 
 namespace PetFamily.Domain.VolunteerAggregate.Entities
 {
-    public class Pet : Shared.Models.Entity<PetId>
+    public class Pet : Entity<PetId>
     {
-        public const int NAME_MAX_LENGTH = 50;
-        public const int DESCRIPTION_MAX_LENGTH = 500;
-        public const int PHONE_NUMBER_LENGTH = 11;
-
-        public string Name { get; private set; }
-        public string Description { get; private set; }
+        public Name Name { get; private set; }
+        public Description Description { get; private set; }
         public AppearanceDetails AppearanceDetails { get; private set; }
         public HealthDetails HealthDetails { get; private set; }
         public MapAddress ResidentialAddress { get; private set; }
-        public string PhoneNumber { get; private set; }
+        public PhoneNumber PhoneNumber { get; private set; }
         public DateTime DateOfBirth { get; private set; }
         public AssistanceStatus AssistanceStatus { get; private set; }
-        public ValueObjectList<RequisiteForAssistance> Requisites { get; private set; }
+        public ValueObjectList<Requisite> Requisites { get; private set; }
         public ValueObjectList<PetPhoto> Photos { get; private set; }
         public DateTime CreatedAt { get; private set; }
 
         private Pet() : base(PetId.NewId()) {}
-        private Pet(
-            string name,
-            string description,
+        public Pet(
+            Name name,
+            Description description,
             AppearanceDetails appearanceDetails,
             HealthDetails healthDetails,
             MapAddress residentialAddress,
-            string phoneNumber,
+            PhoneNumber phoneNumber,
             DateTime dateOfBirth,
             AssistanceStatus assistanceStatus,
-            List<RequisiteForAssistance> requisites,
+            List<Requisite> requisites,
             List<PetPhoto> photos) : base(PetId.NewId())
         {
             Name = name;
@@ -47,50 +44,6 @@ namespace PetFamily.Domain.VolunteerAggregate.Entities
             Requisites = requisites;
             Photos = photos;
             CreatedAt = DateTime.UtcNow;
-        }
-
-        public static Result<Pet> Create(
-            string name,
-            string description,
-            AppearanceDetails appearanceDetails,
-            HealthDetails healthDetails,
-            MapAddress residentialAddress,
-            string phoneNumber,
-            DateTime dateOfBirth,
-            AssistanceStatus assistanceStatus,
-            List<RequisiteForAssistance> requisites,
-            List<PetPhoto> photos)
-        {
-            if(string.IsNullOrWhiteSpace(name) || name.Length > NAME_MAX_LENGTH)
-                return Error.Validation("Pet.Create.Invalid", $"The \"name\" argument must not be empty and must consist of no more than {NAME_MAX_LENGTH} characters.");
-
-            if(string.IsNullOrWhiteSpace(description) || description.Length > DESCRIPTION_MAX_LENGTH)
-                return Error.Validation("Pet.Create.Invalid", $"The \"description\" argument must not be empty and must consist of no more than {DESCRIPTION_MAX_LENGTH} characters.");
-
-            if (appearanceDetails == null)
-                return Error.Validation("Pet.Create.Invalid", $"The \"appearanceDetails\" argument must not be empty.");
-
-            if (healthDetails == null)
-                return Error.Validation("Pet.Create.Invalid", $"The \"healthDetails\" argument must not be empty.");
-
-            if (residentialAddress == null)
-                return Error.Validation("Pet.Create.Invalid", $"The \"residentialAddress\" argument must not be empty.");
-
-            if(phoneNumber.Length != PHONE_NUMBER_LENGTH)
-                return Error.Validation("Pet.Create.Invalid", $"The \"phoneNumber\" argument must be {PHONE_NUMBER_LENGTH} characters long.");
-
-            var pet = new Pet(name,
-                              description, 
-                              appearanceDetails,
-                              healthDetails,
-                              residentialAddress,
-                              phoneNumber,
-                              dateOfBirth,
-                              assistanceStatus,
-                              requisites,
-                              photos);
-
-            return pet;
         }
     }
 }

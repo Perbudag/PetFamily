@@ -5,6 +5,7 @@ using PetFamily.Infrastructure.Extensions;
 using PetFamily.Domain.VolunteerAggregate.ValueObjects;
 using PetFamily.Domain.VolunteerAggregate.ValueObjects.Ids;
 using PetFamily.Domain.SpeciesAggregate.ValueObjects.Ids;
+using PetFamily.Domain.Shared.ValueObjects;
 
 namespace PetFamily.Infrastructure.Database.Configurations
 {
@@ -22,13 +23,21 @@ namespace PetFamily.Infrastructure.Database.Configurations
                     id => id.Value,
                     id => PetId.Create(id));
 
-            builder.Property(p => p.Name)
+            builder.ComplexProperty(p => p.Name, b =>
+            {
+                b.Property(p => p.Value)
+                .HasColumnName("name")
                 .IsRequired()
-                .HasMaxLength(Pet.NAME_MAX_LENGTH);
+                .HasMaxLength(Name.NAME_MAX_LENGTH);
+            });
 
-            builder.Property(p => p.Description)
+            builder.ComplexProperty(v => v.Description, b =>
+            {
+                b.Property(d => d.Value)
+                .HasColumnName("description")
                 .IsRequired(false)
-                .HasMaxLength(Pet.DESCRIPTION_MAX_LENGTH);
+                .HasMaxLength(Description.DESCRIPTION_MAX_LENGTH);
+            });
 
             builder.ComplexProperty(p => p.AppearanceDetails, b =>
             {
@@ -83,9 +92,13 @@ namespace PetFamily.Infrastructure.Database.Configurations
                     a => MapAddress.Parse(a).Value)
                 .HasMaxLength(MapAddress.ADDRESS_MAX_LENGTH);
 
-            builder.Property(p => p.PhoneNumber)
+            builder.ComplexProperty(v => v.PhoneNumber, b =>
+            {
+                b.Property(v => v.Value)
+                .HasColumnName("phone_number")
                 .IsRequired()
-                .HasColumnType($"char({Pet.PHONE_NUMBER_LENGTH})");
+                .HasColumnType($"char({PhoneNumber.PHONE_NUMBER_LENGTH})");
+            });
 
             builder.Property(p => p.AssistanceStatus)
                 .IsRequired()
@@ -95,11 +108,11 @@ namespace PetFamily.Infrastructure.Database.Configurations
             {
                 RequisitesBuilder.Property(r => r.Title)
                 .IsRequired()
-                .HasMaxLength(RequisiteForAssistance.TITLE_MAX_LENGTH);
+                .HasMaxLength(Requisite.TITLE_MAX_LENGTH);
 
                 RequisitesBuilder.Property(r => r.Description)
                 .IsRequired()
-                .HasMaxLength(RequisiteForAssistance.DESCRIPTION_MAX_LENGTH);
+                .HasMaxLength(Requisite.DESCRIPTION_MAX_LENGTH);
             });
 
             builder.ValueObjectListToJson(p => p.Photos, PhotosBuilder =>
