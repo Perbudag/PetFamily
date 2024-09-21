@@ -10,9 +10,6 @@ namespace PetFamily.API.Extensions
             var errors = from error in validationResult.Errors
                          select Error.Validation(error.ErrorCode, error.ErrorMessage, error.PropertyName);
 
-
-            var x = errors.ToList();
-
             return errors.ToList();
         }
     }
