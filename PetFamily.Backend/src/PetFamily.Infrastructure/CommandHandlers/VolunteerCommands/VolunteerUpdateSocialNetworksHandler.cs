@@ -10,20 +10,20 @@ using PetFamily.Infrastructure.Database;
 
 namespace PetFamily.Infrastructure.CommandHandlers.VolunteerCommands
 {
-    internal class UpdateSocialNetworksHandler : IUpdateSocialNetworksHandler
+    internal class VolunteerUpdateSocialNetworksHandler : IVolunteerUpdateSocialNetworksHandler
     {
         private readonly PetFamilyDbContext _context;
-        private readonly ILogger<UpdateSocialNetworksHandler> _logger;
-        private readonly IValidator<UpdateSocialNetworksCommand> _validator;
+        private readonly ILogger<VolunteerUpdateSocialNetworksHandler> _logger;
+        private readonly IValidator<VolunteerUpdateSocialNetworksCommand> _validator;
 
-        public UpdateSocialNetworksHandler(PetFamilyDbContext context, ILogger<UpdateSocialNetworksHandler> logger, IValidator<UpdateSocialNetworksCommand> validator)
+        public VolunteerUpdateSocialNetworksHandler(PetFamilyDbContext context, ILogger<VolunteerUpdateSocialNetworksHandler> logger, IValidator<VolunteerUpdateSocialNetworksCommand> validator)
         {
             _context = context;
             _logger = logger;
             _validator = validator;
         }
 
-        public async Task<Result<Guid>> Handle(UpdateSocialNetworksCommand command, CancellationToken cancellationToken = default)
+        public async Task<Result<Guid>> Handle(VolunteerUpdateSocialNetworksCommand command, CancellationToken cancellationToken = default)
         {
             var validationResult = _validator.Validate(command);
 

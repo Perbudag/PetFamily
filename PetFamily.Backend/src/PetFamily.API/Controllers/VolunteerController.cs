@@ -15,8 +15,8 @@ namespace PetFamily.API.Controllers
 
         [HttpPost]
         public async Task<ActionResult<Guid>> Create(
-            [FromServices] ICreateVolunteerHandler handler,
-            [FromBody] CreateVolunteerRequest request,
+            [FromServices] IVolunteerCreateHandler handler,
+            [FromBody] VolunteerCreateRequest request,
             CancellationToken cancellationToken)
         {
             var command = request.ToCommand();
@@ -29,9 +29,9 @@ namespace PetFamily.API.Controllers
 
         [HttpPut("{id:guid}/main-info")]
         public async Task<ActionResult<Guid>> UpdateMainInfo(
-            [FromServices] IUpdateVolunteerMainInfoHandler handler,
+            [FromServices] IVolunteerUpdateMainInfoHandler handler,
             [FromRoute]Guid id,
-            [FromBody] UpdateVolunteerMainInfoRequest request,
+            [FromBody] VolunteerUpdateMainInfoRequest request,
             CancellationToken cancellationToken)
         {
             var command = request.ToCommand(id);
@@ -44,9 +44,9 @@ namespace PetFamily.API.Controllers
 
         [HttpPut("{id:guid}/social-networks")]
         public async Task<ActionResult<Guid>> UpdateSocialNetworks(
-            [FromServices] IUpdateSocialNetworksHandler handler,
+            [FromServices] IVolunteerUpdateSocialNetworksHandler handler,
             [FromRoute] Guid id,
-            [FromBody] UpdateSocialNetworksRequest request,
+            [FromBody] VolunteerUpdateSocialNetworksRequest request,
             CancellationToken cancellationToken)
         {
             var command = request.ToCommand(id);
@@ -59,9 +59,9 @@ namespace PetFamily.API.Controllers
 
         [HttpPut("{id:guid}/requisites")]
         public async Task<ActionResult<Guid>> UpdateRequisites(
-            [FromServices] IUpdateRequisitesHandler handler,
+            [FromServices] IVolunteerUpdateRequisitesHandler handler,
             [FromRoute] Guid id,
-            [FromBody] UpdateRequisitesRequest request,
+            [FromBody] VolunteerUpdateRequisitesRequest request,
             CancellationToken cancellationToken)
         {
             var command = request.ToCommand(id);

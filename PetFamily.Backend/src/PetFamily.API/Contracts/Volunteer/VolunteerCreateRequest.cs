@@ -3,7 +3,7 @@ using PetFamily.Application.Dto;
 
 namespace PetFamily.API.Contracts.Volunteer
 {
-    public record CreateVolunteerRequest(
+    public record VolunteerCreateRequest(
             string Firstname, 
             string Lastname, 
             string Patronymic,
@@ -14,11 +14,11 @@ namespace PetFamily.API.Contracts.Volunteer
             IEnumerable<SocialNetworkDto>? SocialNetworks,
             IEnumerable<RequisiteForAssistanceDto>? Requisites)
     {
-        public CreateVolunteerCommand ToCommand()
+        public VolunteerCreateCommand ToCommand()
         {
             var fullname = new FulNameDto(Firstname, Lastname, Patronymic);
 
-            return new CreateVolunteerCommand(
+            return new VolunteerCreateCommand(
                 fullname,
                 Description,
                 WorkExperience,

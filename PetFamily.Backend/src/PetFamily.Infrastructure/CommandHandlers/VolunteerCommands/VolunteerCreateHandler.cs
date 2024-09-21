@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Logging;
 using PetFamily.API.Extensions;
 using PetFamily.Application.Commands.Volunteer.Create;
-using PetFamily.Application.Commands.Volunteer.Update;
 using PetFamily.Application.Interfaces.Repositories;
 using PetFamily.Domain.Shared.Models;
 using PetFamily.Domain.Shared.ValueObjects;
@@ -12,14 +11,14 @@ using PetFamily.Infrastructure.Database;
 
 namespace PetFamily.Infrastructure.CommandHandlers.VolunteerCommands
 {
-    internal class CreateVolunteerHandler : ICreateVolunteerHandler
+    internal class VolunteerCreateHandler : IVolunteerCreateHandler
     {
         private readonly PetFamilyDbContext _dbContext;
         private readonly IVolunteerRepositoriy _repository;
-        private readonly ILogger<CreateVolunteerHandler> _logger;
-        private readonly IValidator<CreateVolunteerCommand> _validator;
+        private readonly ILogger<VolunteerCreateHandler> _logger;
+        private readonly IValidator<VolunteerCreateCommand> _validator;
 
-        public CreateVolunteerHandler(PetFamilyDbContext dbContext, IVolunteerRepositoriy repository, ILogger<CreateVolunteerHandler> logger, IValidator<CreateVolunteerCommand> validator)
+        public VolunteerCreateHandler(PetFamilyDbContext dbContext, IVolunteerRepositoriy repository, ILogger<VolunteerCreateHandler> logger, IValidator<VolunteerCreateCommand> validator)
         {
             _dbContext = dbContext;
             _repository = repository;
@@ -27,7 +26,7 @@ namespace PetFamily.Infrastructure.CommandHandlers.VolunteerCommands
             _validator = validator;
         }
 
-        public async Task<Result<Guid>> Handle(CreateVolunteerCommand command, CancellationToken cancellationToken)
+        public async Task<Result<Guid>> Handle(VolunteerCreateCommand command, CancellationToken cancellationToken)
         {
             var validationResult = _validator.Validate(command);
 

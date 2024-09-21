@@ -10,20 +10,20 @@ using PetFamily.Infrastructure.Database;
 
 namespace PetFamily.Infrastructure.CommandHandlers.VolunteerCommands
 {
-    internal class UpdateRequisitesHandler : IUpdateRequisitesHandler
+    internal class VolunteerUpdateRequisitesHandler : IVolunteerUpdateRequisitesHandler
     {
         private readonly PetFamilyDbContext _context;
-        private readonly ILogger<UpdateRequisitesHandler> _logger;
-        private readonly IValidator<UpdateRequisitesCommand> _validator;
+        private readonly ILogger<VolunteerUpdateRequisitesHandler> _logger;
+        private readonly IValidator<VolunteerUpdateRequisitesCommand> _validator;
 
-        public UpdateRequisitesHandler(PetFamilyDbContext context, ILogger<UpdateRequisitesHandler> logger, IValidator<UpdateRequisitesCommand> validator)
+        public VolunteerUpdateRequisitesHandler(PetFamilyDbContext context, ILogger<VolunteerUpdateRequisitesHandler> logger, IValidator<VolunteerUpdateRequisitesCommand> validator)
         {
             _context = context;
             _logger = logger;
             _validator = validator;
         }
 
-        public async Task<Result<Guid>> Handle(UpdateRequisitesCommand command, CancellationToken cancellationToken = default)
+        public async Task<Result<Guid>> Handle(VolunteerUpdateRequisitesCommand command, CancellationToken cancellationToken = default)
         {
             var validationResult = _validator.Validate(command);
 

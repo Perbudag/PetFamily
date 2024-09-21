@@ -3,14 +3,14 @@ using PetFamily.Application.Dto;
 
 namespace PetFamily.API.Contracts.Volunteer
 {
-    public record UpdateVolunteerMainInfoRequest(
+    public record VolunteerUpdateMainInfoRequest(
         FulNameDto Fullname,
         string Description,
         int WorkExperience,
         string Email,
         string PhoneNumber)
     {
-        public UpdateVolunteerMainInfoCommand ToCommand(Guid id) =>
-            new UpdateVolunteerMainInfoCommand(id, Fullname, Description, WorkExperience, Email, PhoneNumber);
+        public VolunteerUpdateMainInfoCommand ToCommand(Guid id) =>
+            new VolunteerUpdateMainInfoCommand(id, Fullname, Description, WorkExperience, Email, PhoneNumber);
     }
 }

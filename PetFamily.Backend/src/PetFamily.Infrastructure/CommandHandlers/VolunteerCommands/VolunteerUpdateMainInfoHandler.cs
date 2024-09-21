@@ -11,23 +11,23 @@ using PetFamily.Infrastructure.Database;
 
 namespace PetFamily.Infrastructure.CommandHandlers.VolunteerCommands
 {
-    internal class UpdateVolunteerMainInfoHandler : IUpdateVolunteerMainInfoHandler
+    internal class VolunteerUpdateMainInfoHandler : IVolunteerUpdateMainInfoHandler
     {
         private readonly PetFamilyDbContext _context;
-        private readonly ILogger<UpdateVolunteerMainInfoHandler> _logger;
-        private readonly IValidator<UpdateVolunteerMainInfoCommand> _validator;
+        private readonly ILogger<VolunteerUpdateMainInfoHandler> _logger;
+        private readonly IValidator<VolunteerUpdateMainInfoCommand> _validator;
 
-        public UpdateVolunteerMainInfoHandler(
+        public VolunteerUpdateMainInfoHandler(
             PetFamilyDbContext context,
-            ILogger<UpdateVolunteerMainInfoHandler> logger,
-            IValidator<UpdateVolunteerMainInfoCommand> validator)
+            ILogger<VolunteerUpdateMainInfoHandler> logger,
+            IValidator<VolunteerUpdateMainInfoCommand> validator)
         {
             _context = context;
             _logger = logger;
             _validator = validator;
         }
 
-        public async Task<Result<Guid>> Handle(UpdateVolunteerMainInfoCommand command, CancellationToken cancellationToken = default)
+        public async Task<Result<Guid>> Handle(VolunteerUpdateMainInfoCommand command, CancellationToken cancellationToken = default)
         {
             var validationResult = _validator.Validate(command);
 

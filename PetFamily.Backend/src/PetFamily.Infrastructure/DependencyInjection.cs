@@ -25,10 +25,10 @@ namespace PetFamily.Infrastructure
 
         public static IServiceCollection AddCommands(this IServiceCollection services)
         {
-            services.AddScoped<ICreateVolunteerHandler, CreateVolunteerHandler>();
-            services.AddScoped<IUpdateVolunteerMainInfoHandler, UpdateVolunteerMainInfoHandler>();
-            services.AddScoped<IUpdateRequisitesHandler, UpdateRequisitesHandler>();
-            services.AddScoped<IUpdateSocialNetworksHandler, UpdateSocialNetworksHandler>();
+            services.AddScoped<IVolunteerCreateHandler, VolunteerCreateHandler>();
+            services.AddScoped<IVolunteerUpdateMainInfoHandler, VolunteerUpdateMainInfoHandler>();
+            services.AddScoped<IVolunteerUpdateRequisitesHandler, VolunteerUpdateRequisitesHandler>();
+            services.AddScoped<IVolunteerUpdateSocialNetworksHandler, VolunteerUpdateSocialNetworksHandler>();
 
             return services;
         }

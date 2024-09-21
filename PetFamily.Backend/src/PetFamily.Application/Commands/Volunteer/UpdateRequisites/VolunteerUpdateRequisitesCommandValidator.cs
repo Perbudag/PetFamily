@@ -4,9 +4,9 @@ using PetFamily.Domain.VolunteerAggregate.ValueObjects;
 
 namespace PetFamily.Application.Commands.Volunteer.UpdateRequisites
 {
-    public class UpdateRequisitesCommandValidator : AbstractValidator<UpdateRequisitesCommand>
+    public class VolunteerUpdateRequisitesCommandValidator : AbstractValidator<VolunteerUpdateRequisitesCommand>
     {
-        public UpdateRequisitesCommandValidator()
+        public VolunteerUpdateRequisitesCommandValidator()
         {
             RuleFor(c => c.Id).NotEmpty();
             RuleForEach(c => c.Requisites).MustBeValueObject(v => Requisite.Create(v.Title, v.Description));

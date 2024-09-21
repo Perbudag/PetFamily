@@ -1,6 +1,0 @@
-﻿using PetFamily.Application.Dto;
-
-namespace PetFamily.Application.Commands.Volunteer.UpdateRequisites
-{
-    public record UpdateRequisitesCommand(Guid Id, IEnumerable<RequisiteForAssistanceDto> Requisites);
-}

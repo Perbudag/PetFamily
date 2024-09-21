@@ -2,7 +2,7 @@
 
 namespace PetFamily.Application.Commands.Volunteer.Update
 {
-    public record UpdateVolunteerMainInfoCommand(
+    public record VolunteerUpdateMainInfoCommand(
         Guid Id,
         FulNameDto Fullname,
         string Description,
