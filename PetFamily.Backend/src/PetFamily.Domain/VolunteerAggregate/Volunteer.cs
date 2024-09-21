@@ -31,8 +31,8 @@ namespace PetFamily.Domain.VolunteerAggregate
             WorkExperience workExperience,
             EmailAddress email,
             PhoneNumber phoneNumber,
-            List<SocialNetwork> socialNetworks,
-            List<Requisite> requisites) : base(VolunteerId.NewId())
+            ValueObjectList<SocialNetwork> socialNetworks,
+            ValueObjectList<Requisite> requisites) : base(VolunteerId.NewId())
         {
             FullName = fullName;
             Description = description;
@@ -42,5 +42,25 @@ namespace PetFamily.Domain.VolunteerAggregate
             SocialNetworks = socialNetworks;
             Requisites = requisites;
         }
+
+        public void UpdateMainInfo(
+            FullName fullName,
+            Description description,
+            WorkExperience workExperience,
+            EmailAddress email,
+            PhoneNumber phoneNumber)
+        {
+            FullName = fullName;
+            Description = description;
+            WorkExperience = workExperience;
+            Email = email;
+            PhoneNumber = phoneNumber;
+        }
+
+        public void UpdateSocialNetworks(ValueObjectList<SocialNetwork> socialNetworks)=>
+            SocialNetworks = socialNetworks;
+
+        public void UpdateRequisites(ValueObjectList<Requisite> requisites) =>
+            Requisites = requisites;
     }
 }

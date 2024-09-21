@@ -13,7 +13,7 @@ namespace PetFamily.Domain.Shared.Models
         private ValueObjectList() { }
         public ValueObjectList(IEnumerable<T> list)
         {
-            Values = new List<T>(list).AsReadOnly();
+            Values = new List<T>(list);
         }
 
 

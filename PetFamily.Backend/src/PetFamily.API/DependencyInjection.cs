@@ -1,7 +1,5 @@
 ﻿using Serilog.Events;
 using Serilog;
-using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
-using PetFamily.API.Validation;
 
 namespace PetFamily.API
 {
@@ -15,7 +13,6 @@ namespace PetFamily.API
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
 
-            services.AddFluentValidation(configuration);
             services.AddSerilog(configuration);
 
             return services;
@@ -34,16 +31,6 @@ namespace PetFamily.API
                 .CreateLogger();
 
             services.AddSerilog();
-
-            return services;
-        }
-
-        private static IServiceCollection AddFluentValidation(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddFluentValidationAutoValidation(cfg =>
-            {
-                cfg.OverrideDefaultResultFactoryWith<CustomResultFactory>();
-            });
 
             return services;
         }

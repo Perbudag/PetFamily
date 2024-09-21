@@ -4,7 +4,7 @@ using PetFamily.Domain.Shared.Models;
 
 namespace PetFamily.API.Extensions
 {
-    public static class ResponseExtensions
+    public static class ResultExtensions
     {
         public static ActionResult<T> ToResponse<T>(this Result<T> result, int successStatusCode = StatusCodes.Status200OK)
         {
@@ -16,7 +16,7 @@ namespace PetFamily.API.Extensions
 
             var statusCode = GetStatusCodeForErrorType(result.Errors[0].Type);
 
-            var responseErrors = result.Errors.Select(e => new ResponseError(e.Code, e.Message, null));
+            var responseErrors = result.Errors.Select(e => new ResponseError(e.Code, e.Message, e.InvalidField));
 
             var envelope = Envelope.Error(responseErrors);
 

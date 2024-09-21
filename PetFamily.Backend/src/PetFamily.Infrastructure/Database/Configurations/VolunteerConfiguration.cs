@@ -85,9 +85,9 @@ namespace PetFamily.Infrastructure.Database.Configurations
                 .HasMaxLength(SocialNetwork.NAME_MAX_LENGTH);
 
                 SocialNetworkBuilder.Property(sn => sn.Path)
-                .IsRequired();
+                .IsRequired()
+                .HasMaxLength(SocialNetwork.PATH_MAX_LENGTH);
             });
-
 
             builder.ValueObjectListToJson(v => v.Requisites, RequisitesBuilder =>
             {

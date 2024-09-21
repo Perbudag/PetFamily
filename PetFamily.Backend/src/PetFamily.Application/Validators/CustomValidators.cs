@@ -19,7 +19,14 @@ namespace PetFamily.Application.Validators
 
                 foreach (var error in result.Errors)
                 {
-                    context.AddFailure(error.Serialize());
+                    var validationResult = new ValidationFailure
+                    {
+                        ErrorCode = error.Code,
+                        ErrorMessage = error.Message,
+                        PropertyName = context.PropertyName
+                    };
+
+                    context.AddFailure(validationResult);
                 }
             });
         }
