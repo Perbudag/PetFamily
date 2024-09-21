@@ -8,16 +8,18 @@ namespace PetFamily.Domain.Shared.Models
         public string Code { get; }
         public string Message { get; }
         public ErrorType Type { get; }
+        public string? InvalidField { get; } = null;
 
-        private Error(string code, string message, ErrorType type)
+        private Error(string code, string message, ErrorType type, string? invalidField  = null)
         {
             Code = code;
             Message = message;
             Type = type;
+            InvalidField = invalidField;
         }
 
-        public static Error Validation(string code, string message) =>
-            new(code, message, ErrorType.Validation);
+        public static Error Validation(string code, string message, string? invalidField = null) =>
+            new(code, message, ErrorType.Validation, invalidField);
 
         public static Error NotFound(string code, string message) =>
             new(code, message, ErrorType.NotFound);
@@ -28,7 +30,7 @@ namespace PetFamily.Domain.Shared.Models
         public static Error Conflict(string code, string message) =>
             new(code, message, ErrorType.Conflict);
 
-        public string Serialize() =>
+        /*public string Serialize() =>
             string.Join(SEPARATOR, Code, Message, Type);
 
         public static Error Deserialize(string serialized) 
@@ -39,6 +41,6 @@ namespace PetFamily.Domain.Shared.Models
                 throw new ArgumentException("Invalid serialized format");
 
             return new Error(parts[0], parts[1], Enum.Parse<ErrorType>(parts[2]));
-        }
+        }*/
     }
 }

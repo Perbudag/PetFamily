@@ -11,15 +11,17 @@ namespace PetFamily.Infrastructure.Database
         private const string CONNECTION_STRING = "Postgres.PetFamily";
 
         private readonly IConfiguration _configuration;
+        private readonly ILoggerFactory _loggerFactory;
 
 
         public DbSet<Volunteer> Volunteers { get; set; }
         public DbSet<Species> Species { get; set; }
 
 
-        public PetFamilyDbContext(IConfiguration configuration)
+        public PetFamilyDbContext(IConfiguration configuration, ILoggerFactory loggerFactory)
         {
             _configuration = configuration;
+            _loggerFactory = loggerFactory;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -27,16 +29,14 @@ namespace PetFamily.Infrastructure.Database
             var test = _configuration.GetConnectionString(CONNECTION_STRING);
             optionsBuilder.UseNpgsql(_configuration.GetConnectionString(CONNECTION_STRING));
             optionsBuilder.UseSnakeCaseNamingConvention();
-            optionsBuilder.UseLoggerFactory(CreateLoggerFactory());
+            optionsBuilder.EnableSensitiveDataLogging();
+            optionsBuilder.UseLoggerFactory(_loggerFactory);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(PetFamilyDbContext).Assembly);
         }
-
-        private ILoggerFactory CreateLoggerFactory() =>
-            LoggerFactory.Create(builder => { builder.AddConsole(); });
 
     }
 }

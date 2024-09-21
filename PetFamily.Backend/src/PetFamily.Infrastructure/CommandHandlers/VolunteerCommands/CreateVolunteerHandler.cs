@@ -1,5 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using FluentValidation;
+using Microsoft.Extensions.Logging;
+using PetFamily.API.Extensions;
 using PetFamily.Application.Commands.Volunteer.Create;
+using PetFamily.Application.Commands.Volunteer.Update;
 using PetFamily.Application.Interfaces.Repositories;
 using PetFamily.Domain.Shared.Models;
 using PetFamily.Domain.Shared.ValueObjects;
@@ -14,16 +17,23 @@ namespace PetFamily.Infrastructure.CommandHandlers.VolunteerCommands
         private readonly PetFamilyDbContext _dbContext;
         private readonly IVolunteerRepositoriy _repository;
         private readonly ILogger<CreateVolunteerHandler> _logger;
+        private readonly IValidator<CreateVolunteerCommand> _validator;
 
-        public CreateVolunteerHandler(PetFamilyDbContext dbContext, IVolunteerRepositoriy repository, ILogger<CreateVolunteerHandler> logger)
+        public CreateVolunteerHandler(PetFamilyDbContext dbContext, IVolunteerRepositoriy repository, ILogger<CreateVolunteerHandler> logger, IValidator<CreateVolunteerCommand> validator)
         {
             _dbContext = dbContext;
             _repository = repository;
             _logger = logger;
+            _validator = validator;
         }
 
         public async Task<Result<Guid>> Handle(CreateVolunteerCommand command, CancellationToken cancellationToken)
         {
+            var validationResult = _validator.Validate(command);
+
+            if (validationResult.IsValid == false)
+                return validationResult.ToErrorList();
+
             var fullname = FullName.Create(
                 command.Fullname.Firstname,
                 command.Fullname.Lastname,

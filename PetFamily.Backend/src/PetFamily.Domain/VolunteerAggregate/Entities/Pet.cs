@@ -30,8 +30,8 @@ namespace PetFamily.Domain.VolunteerAggregate.Entities
             PhoneNumber phoneNumber,
             DateTime dateOfBirth,
             AssistanceStatus assistanceStatus,
-            List<Requisite> requisites,
-            List<PetPhoto> photos) : base(PetId.NewId())
+            ValueObjectList<Requisite> requisites,
+            ValueObjectList<PetPhoto> photos) : base(PetId.NewId())
         {
             Name = name;
             Description = description;
