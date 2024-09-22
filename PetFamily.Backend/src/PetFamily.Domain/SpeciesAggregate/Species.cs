@@ -7,10 +7,10 @@ namespace PetFamily.Domain.SpeciesAggregate
 {
     public class Species : Entity<SpeciesId>
     {
-        private readonly List<Breed> _Breeds = [];
+        private readonly List<Breed> _breeds = [];
 
         public Name Name { get; private set; }
-        public IReadOnlyList<Breed> Breeds => _Breeds.AsReadOnly();
+        public IReadOnlyList<Breed> Breeds => _breeds.AsReadOnly();
 
         private Species() : base(SpeciesId.NewId()) { }
         public Species(Name name) : base(SpeciesId.NewId())

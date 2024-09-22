@@ -124,7 +124,7 @@ namespace PetFamily.Infrastructure.Database.Configurations
                 .IsRequired();
             });
 
-            builder.Property<bool>("_IsDeleted")
+            builder.Property<bool>("_isDeleted")
                 .UsePropertyAccessMode(PropertyAccessMode.Field)
                 .HasColumnName("is_deleted");
         }

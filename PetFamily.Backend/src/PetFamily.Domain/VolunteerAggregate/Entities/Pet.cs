@@ -8,7 +8,7 @@ namespace PetFamily.Domain.VolunteerAggregate.Entities
 {
     public class Pet : Entity<PetId>, ISoftDeletable
     {
-        private bool _IsDeleted = false;
+        private bool _isDeleted = false;
 
         public Name Name { get; private set; }
         public Description Description { get; private set; }
@@ -49,12 +49,12 @@ namespace PetFamily.Domain.VolunteerAggregate.Entities
         }
 
         public void Delete() =>
-            _IsDeleted = true;
+            _isDeleted = true;
 
         public void Restore() =>
-            _IsDeleted = false;
+            _isDeleted = false;
 
         public bool IsDeleted() =>
-            _IsDeleted;
+            _isDeleted;
     }
 }
