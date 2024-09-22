@@ -7,8 +7,10 @@ using PetFamily.Domain.VolunteerAggregate.ValueObjects.Ids;
 
 namespace PetFamily.Domain.VolunteerAggregate
 {
-    public class Volunteer : Entity<VolunteerId>
+    public class Volunteer : Entity<VolunteerId>, ISoftDeletable
     {
+        private bool _IsDeleted = false;
+
         private readonly List<Pet> _Pets = [];
 
         public FullName FullName { get; private set; }
@@ -62,5 +64,24 @@ namespace PetFamily.Domain.VolunteerAggregate
 
         public void UpdateRequisites(ValueObjectList<Requisite> requisites) =>
             Requisites = requisites;
+
+        public void Delete() 
+        {
+            _IsDeleted = true;
+
+            for(int i = 0; i < _Pets.Count; i++)
+                _Pets[i].Delete();
+        }
+
+        public void Restore()
+        {
+            _IsDeleted = false;
+
+            for (int i = 0; i < _Pets.Count; i++)
+                _Pets[i].Restore();
+        }
+
+        public bool IsDeleted() =>
+            _IsDeleted;
     }
 }

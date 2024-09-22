@@ -120,9 +120,13 @@ namespace PetFamily.Infrastructure.Database.Configurations
                 PhotosBuilder.Property(ph => ph.Path)
                 .IsRequired();
 
-                PhotosBuilder.Property<bool>(ph => ph.IsMain)
+                PhotosBuilder.Property(ph => ph.IsMain)
                 .IsRequired();
             });
+
+            builder.Property<bool>("_IsDeleted")
+                .UsePropertyAccessMode(PropertyAccessMode.Field)
+                .HasColumnName("is_deleted");
         }
     }
 }

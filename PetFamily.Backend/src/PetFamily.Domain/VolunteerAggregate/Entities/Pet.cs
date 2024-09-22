@@ -6,8 +6,10 @@ using PetFamily.Domain.VolunteerAggregate.ValueObjects.Ids;
 
 namespace PetFamily.Domain.VolunteerAggregate.Entities
 {
-    public class Pet : Entity<PetId>
+    public class Pet : Entity<PetId>, ISoftDeletable
     {
+        private bool _IsDeleted = false;
+
         public Name Name { get; private set; }
         public Description Description { get; private set; }
         public AppearanceDetails AppearanceDetails { get; private set; }
@@ -45,5 +47,14 @@ namespace PetFamily.Domain.VolunteerAggregate.Entities
             Photos = photos;
             CreatedAt = DateTime.UtcNow;
         }
+
+        public void Delete() =>
+            _IsDeleted = true;
+
+        public void Restore() =>
+            _IsDeleted = false;
+
+        public bool IsDeleted() =>
+            _IsDeleted;
     }
 }
