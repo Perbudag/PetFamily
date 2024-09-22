@@ -107,6 +107,10 @@ namespace PetFamily.Infrastructure.Database.Configurations
                 .HasForeignKey("volunteer_id")
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Property<bool>("_isDeleted")
+                .UsePropertyAccessMode(PropertyAccessMode.Field)
+                .HasColumnName("is_deleted");
+
         }
     }
 

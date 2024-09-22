@@ -7,9 +7,11 @@ using PetFamily.Domain.VolunteerAggregate.ValueObjects.Ids;
 
 namespace PetFamily.Domain.VolunteerAggregate
 {
-    public class Volunteer : Entity<VolunteerId>
+    public class Volunteer : Entity<VolunteerId>, ISoftDeletable
     {
-        private readonly List<Pet> _Pets = [];
+        private bool _isDeleted = false;
+
+        private readonly List<Pet> _pets = [];
 
         public FullName FullName { get; private set; }
         public Description Description { get; private set; }
@@ -18,7 +20,7 @@ namespace PetFamily.Domain.VolunteerAggregate
         public PhoneNumber PhoneNumber { get; private set; }
         public ValueObjectList<SocialNetwork> SocialNetworks { get; private set; }
         public ValueObjectList<Requisite> Requisites { get; private set; }
-        public IReadOnlyList<Pet> Pets => _Pets.AsReadOnly();
+        public IReadOnlyList<Pet> Pets => _pets.AsReadOnly();
 
         public int PetsFoundHomeCount => Pets.Count(p => p.AssistanceStatus == AssistanceStatus.FoundTheHouse);
         public int PetsLookingForHomeCount => Pets.Count(p => p.AssistanceStatus == AssistanceStatus.LookingForAHome);
@@ -62,5 +64,24 @@ namespace PetFamily.Domain.VolunteerAggregate
 
         public void UpdateRequisites(ValueObjectList<Requisite> requisites) =>
             Requisites = requisites;
+
+        public void Delete() 
+        {
+            _isDeleted = true;
+
+            for(int i = 0; i < _pets.Count; i++)
+                _pets[i].Delete();
+        }
+
+        public void Restore()
+        {
+            _isDeleted = false;
+
+            for (int i = 0; i < _pets.Count; i++)
+                _pets[i].Restore();
+        }
+
+        public bool IsDeleted() =>
+            _isDeleted;
     }
 }

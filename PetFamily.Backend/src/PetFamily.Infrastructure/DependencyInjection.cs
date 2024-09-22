@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Application.Commands.Volunteer.Create;
+using PetFamily.Application.Commands.Volunteer.Delete;
 using PetFamily.Application.Commands.Volunteer.Update;
 using PetFamily.Application.Commands.Volunteer.UpdateRequisites;
 using PetFamily.Application.Commands.Volunteer.UpdateSocialNetworks;
@@ -15,8 +16,7 @@ namespace PetFamily.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<PetFamilyDbContext>();
-
+            services.AddDatabase();
             services.AddCommands();
             services.AddRepositories();
 
@@ -29,6 +29,13 @@ namespace PetFamily.Infrastructure
             services.AddScoped<IVolunteerUpdateMainInfoHandler, VolunteerUpdateMainInfoHandler>();
             services.AddScoped<IVolunteerUpdateRequisitesHandler, VolunteerUpdateRequisitesHandler>();
             services.AddScoped<IVolunteerUpdateSocialNetworksHandler, VolunteerUpdateSocialNetworksHandler>();
+            services.AddScoped<IVolunteerDeleteHandler, VolunteerDeleteHandler>();
+
+            return services;
+        }
+        public static IServiceCollection AddDatabase(this IServiceCollection services)
+        {
+            services.AddScoped<PetFamilyDbContext>();
 
             return services;
         }

@@ -2,6 +2,7 @@
 using PetFamily.API.Contracts.Volunteer;
 using PetFamily.API.Extensions;
 using PetFamily.Application.Commands.Volunteer.Create;
+using PetFamily.Application.Commands.Volunteer.Delete;
 using PetFamily.Application.Commands.Volunteer.Update;
 using PetFamily.Application.Commands.Volunteer.UpdateRequisites;
 using PetFamily.Application.Commands.Volunteer.UpdateSocialNetworks;
@@ -65,6 +66,19 @@ namespace PetFamily.API.Controllers
             CancellationToken cancellationToken)
         {
             var command = request.ToCommand(id);
+
+            var result = await handler.Handle(command, cancellationToken);
+
+            return result.ToResponse();
+        }
+
+        [HttpDelete("{id:guid}")]
+        public async Task<ActionResult<Guid>> Delete(
+            [FromServices] IVolunteerDeleteHandler handler,
+            [FromRoute] Guid id,
+            CancellationToken cancellationToken)
+        {
+            var command = new VolunteerDeleteCommand(id);
 
             var result = await handler.Handle(command, cancellationToken);
 

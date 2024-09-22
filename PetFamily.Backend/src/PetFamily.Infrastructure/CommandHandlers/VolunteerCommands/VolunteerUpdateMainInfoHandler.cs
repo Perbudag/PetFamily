@@ -46,7 +46,7 @@ namespace PetFamily.Infrastructure.CommandHandlers.VolunteerCommands
 
             var phoneNumber = PhoneNumber.Create(command.PhoneNumber).Value;
 
-            var volunteer = await _context.Volunteers.FirstOrDefaultAsync(v => v.Id == volunteerId);
+            var volunteer = await _context.Volunteers.FirstOrDefaultAsync(v => v.Id == volunteerId, cancellationToken);
 
             List<Error> errors = [];
 

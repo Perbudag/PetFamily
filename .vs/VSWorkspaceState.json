@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\PetFamily.Backend"
   ],
-  "SelectedNode": "\\PetFamily.Backend.sln",
+  "SelectedNode": "\\PetFamily.Backend\\PetFamily.Backend.sln",
   "PreviewInSolutionExplorer": false
 }
