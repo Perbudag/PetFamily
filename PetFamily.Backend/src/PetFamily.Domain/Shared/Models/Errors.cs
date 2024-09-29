@@ -74,6 +74,20 @@ namespace PetFamily.Domain.Shared.Models
 
         }
 
+        public static class Volunteer
+        {
+            public static Error NotFound(string fieldName) =>
+                        Error.NotFound("Volunteer.Not.Found", $"A volunteer with this {fieldName} was not found.");
+
+        }
+
+        public static class FileProvider
+        {
+            public static Error NotFound(string fileName) =>
+                        Error.NotFound("File.Not.Found", $"The file with the name \"{fileName}\" was not found.");
+
+        }
+
         private static string FormatErrorCode(string source, string errorCode)
         {
             string[] sourceLines = source.Split('.');
