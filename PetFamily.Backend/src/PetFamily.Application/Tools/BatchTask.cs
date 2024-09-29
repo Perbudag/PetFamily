@@ -3,10 +3,10 @@
     public class BatchTask<T>
     {
         private readonly SemaphoreSlim _semaphore;
-        private readonly List<Func<T>> _funcs;
+        private readonly List<Func<Task<T>>> _funcs;
         private readonly List<Action<T>> _onExecutedAction;
 
-        public BatchTask(List<Func<T>> funcs, int initialCount)
+        public BatchTask(List<Func<Task<T>>> funcs, int initialCount)
         {
             _funcs = funcs;
             _semaphore = new SemaphoreSlim(initialCount);
@@ -33,7 +33,7 @@
 
                     try
                     {
-                        var result = func();
+                        var result = await func();
                         foreach (var action in _onExecutedAction)
                         {
                             action(result);

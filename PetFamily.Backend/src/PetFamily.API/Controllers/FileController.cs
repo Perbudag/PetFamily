@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetFamily.API.Extensions;
+using PetFamily.API.Models;
 using PetFamily.Application.Interfaces.Providers;
 using PetFamily.Application.Models;
 using PetFamily.Domain.Shared.Models;
@@ -17,29 +18,31 @@ namespace PetFamily.API.Controllers
             [FromForm] IFormFileCollection formFileCollection,
             CancellationToken cancellationToken)
         {
-            List<FileData> filesData = new List<FileData>();
+            await using FileDataList filesData = new(formFileCollection);
 
-            foreach (var formFile in formFileCollection)
-            {
-                var location = new FileLocation("test", formFile.FileName);
-
-                var fileData = new FileData(formFile.OpenReadStream(), location);
-
-                filesData.Add(fileData);
-            }
-
+            List<Error> errors = new();
             Result<List<string>> result = new List<string>();
 
-            
-            var batchTask = fileProvider.Upload(filesData, cancellationToken).Result.Value;
-            batchTask.OnExecuted(async fileName => 
-            {
-                logger.LogInformation("End uploading file with new name: {newName}", fileName);
+            var batchTask = await fileProvider.Upload(filesData, cancellationToken);
 
-                result.Value.Add(fileName);
+            batchTask.OnExecuted(fileName => 
+            {
+                if(fileName.IsSuccess)
+                {
+                    logger.LogInformation("End uploading file with new name: {newName}", fileName);
+
+                    result.Value.Add(fileName.Value);
+                }
+                else
+                {
+                    errors.AddRange(fileName.Errors);
+                }
             });
 
             await batchTask.Run();
+
+            if (errors.Count > 0)
+                return Result.Failure(errors).ToResponse();
 
             return result.ToResponse();
         }

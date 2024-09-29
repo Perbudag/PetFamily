@@ -22,18 +22,18 @@ namespace PetFamily.Infrastructure.Providers
             _logger = logger;
         }
 
-        public async Task<Result<BatchTask<string>>> Upload(List<FileData> filesData, CancellationToken cancellationToken = default)
+        public async Task<BatchTask<Result<string>>> Upload(List<FileData> filesData, CancellationToken cancellationToken = default)
         {
-            List<Func<string>> funcs = new();
+            List<Func<Task<Result<string>>>> funcs = new();
 
             foreach (var fileData in filesData)
             {
                 await CreateButcketIfNotExists(fileData.Location.BucketName, cancellationToken);
 
-                funcs.Add(() => PutFile(fileData, cancellationToken).Result);
+                funcs.Add(() => PutFile(fileData, cancellationToken));
             }
 
-            return new BatchTask<string>(funcs, MAX_DEGREE_OF_PARALLELISM);
+            return new BatchTask<Result<string>>(funcs, MAX_DEGREE_OF_PARALLELISM);
         }
 
         public async Task<Result<string>> GetLink(FileLocation fileLocation)
@@ -49,7 +49,7 @@ namespace PetFamily.Infrastructure.Providers
                 if (statFile.ContentType == null)
                 {
                     _logger.LogError(
-                        "File with bucket \"{BucketName}\", and name \"{FileName}\" not found",
+                        "The file with the bucket \"{BucketName}\" and the name \"{FileName}\" was not found",
                         fileLocation.BucketName,
                         fileLocation.FileName);
                     return Errors.FileProvider.NotFound(fileLocation.FileName);
@@ -131,24 +131,33 @@ namespace PetFamily.Infrastructure.Providers
             }
         }
 
-        private async Task<string> PutFile(FileData fileData, CancellationToken cancellationToken = default)
+        private async Task<Result<string>> PutFile(FileData fileData, CancellationToken cancellationToken = default)
         {
-            Guid guid = Guid.NewGuid();
+            try
+            {
+                Guid guid = Guid.NewGuid();
 
-            string extension = Path.GetExtension(fileData.Location.FileName);
+                string extension = Path.GetExtension(fileData.Location.FileName);
 
-            string fileName = guid.ToString() + extension;
+                string fileName = guid.ToString() + extension;
 
-            var args = new PutObjectArgs()
-                .WithBucket(fileData.Location.BucketName)
-                .WithStreamData(fileData.Stream)
-                .WithObjectSize(fileData.Stream!.Length)
-                .WithObject(fileName);
+                var args = new PutObjectArgs()
+                    .WithBucket(fileData.Location.BucketName)
+                    .WithStreamData(fileData.Stream)
+                    .WithObjectSize(fileData.Stream!.Length)
+                    .WithObject(fileName);
 
-            _logger.LogInformation("Uploading a file with name: \"{name}\" (new name: \"{newName}\")", fileData.Location.FileName, fileName);
-            var result = await _minioClient.PutObjectAsync(args, cancellationToken);
+                _logger.LogInformation("Uploading a file with name: \"{name}\" (new name: \"{newName}\")", fileData.Location.FileName, fileName);
+                var result = await _minioClient.PutObjectAsync(args, cancellationToken);
 
-            return result.ObjectName;
+                return result.ObjectName;
+            }
+            catch(MinioException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+
+                return Error.Failure("File.Upload.Failure", ex.Message);
+            }
         }
     }
 }
