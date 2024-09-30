@@ -48,7 +48,7 @@ namespace PetFamily.Infrastructure.CommandHandlers.VolunteerCommands
 
             if (volunteer is null)
             {
-                errors.Add(Error.NotFound("Volunteer.Not.Found", "A volunteer with this ID was not found."));
+                errors.Add(Errors.Volunteer.NotFound("ID"));
             }
 
             if (errors.Count > 0)

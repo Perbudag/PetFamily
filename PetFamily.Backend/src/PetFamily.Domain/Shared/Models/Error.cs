@@ -29,18 +29,5 @@ namespace PetFamily.Domain.Shared.Models
 
         public static Error Conflict(string code, string message) =>
             new(code, message, ErrorType.Conflict);
-
-        /*public string Serialize() =>
-            string.Join(SEPARATOR, Code, Message, Type);
-
-        public static Error Deserialize(string serialized) 
-        {
-            var parts = serialized.Split(SEPARATOR);
-
-            if (parts.Length < 3)
-                throw new ArgumentException("Invalid serialized format");
-
-            return new Error(parts[0], parts[1], Enum.Parse<ErrorType>(parts[2]));
-        }*/
     }
 }

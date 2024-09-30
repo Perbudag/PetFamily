@@ -26,6 +26,26 @@ namespace PetFamily.API.Extensions
             };
         }
 
+        public static ActionResult ToResponse(this Result result, int successStatusCode = StatusCodes.Status200OK)
+        {
+            if (result.IsSuccess)
+                return new ObjectResult(Envelope.Ok(null))
+                {
+                    StatusCode = successStatusCode
+                };
+
+            var statusCode = GetStatusCodeForErrorType(result.Errors[0].Type);
+
+            var responseErrors = result.Errors.Select(e => new ResponseError(e.Code, e.Message, e.InvalidField));
+
+            var envelope = Envelope.Error(responseErrors);
+
+            return new ObjectResult(envelope)
+            {
+                StatusCode = statusCode
+            };
+        }
+
         private static int GetStatusCodeForErrorType(ErrorType errorType) =>
         errorType switch
         {
