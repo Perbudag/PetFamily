@@ -6,7 +6,7 @@ namespace PetFamily.Application.Interfaces.Providers
 {
     public interface IFileProvider
     {
-        Task<BatchTask<Result<string>>> Upload(List<FileData> filesData, CancellationToken cancellationToken = default);
+        BatchTask<Result<string>> Upload(List<FileData> filesData, CancellationToken cancellationToken = default);
 
         Task<Result<string>> GetLink(FileLocation fileLocation);
 

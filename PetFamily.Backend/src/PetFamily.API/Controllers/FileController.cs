@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using PetFamily.API.Extensions;
 using PetFamily.API.Models;
 using PetFamily.Application.Interfaces.Providers;
@@ -23,7 +24,7 @@ namespace PetFamily.API.Controllers
             List<Error> errors = new();
             Result<List<string>> result = new List<string>();
 
-            var batchTask = await fileProvider.Upload(filesData, cancellationToken);
+            var batchTask = fileProvider.Upload(filesData, cancellationToken);
 
             batchTask.OnExecuted(fileName => 
             {
@@ -64,6 +65,9 @@ namespace PetFamily.API.Controllers
 
             foreach (var fileLocation in filesLocation)
             {
+                if(cancellationToken.IsCancellationRequested)
+                    return Result.Success().ToResponse(StatusCodes.Status499ClientClosedRequest);
+
                 var getFileResult = await fileProvider.GetLink(fileLocation);
 
                 if (getFileResult.IsFailure)

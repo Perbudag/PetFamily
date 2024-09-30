@@ -22,13 +22,13 @@ namespace PetFamily.Infrastructure.Providers
             _logger = logger;
         }
 
-        public async Task<BatchTask<Result<string>>> Upload(List<FileData> filesData, CancellationToken cancellationToken = default)
+        public BatchTask<Result<string>> Upload(List<FileData> filesData, CancellationToken cancellationToken = default)
         {
             List<Func<Task<Result<string>>>> funcs = new();
 
             foreach (var fileData in filesData)
             {
-                await CreateButcketIfNotExists(fileData.Location.BucketName, cancellationToken);
+                CreateBucketIfNotExists(fileData.Location.BucketName, cancellationToken);
 
                 funcs.Add(() => PutFile(fileData, cancellationToken));
             }
@@ -115,7 +115,7 @@ namespace PetFamily.Infrastructure.Providers
         }
 
 
-        private async Task CreateButcketIfNotExists(string BucketName, CancellationToken cancellationToken)
+        private async void CreateBucketIfNotExists(string BucketName, CancellationToken cancellationToken)
         {
             var bucketExistsArgs = new BucketExistsArgs()
                 .WithBucket(BucketName);
