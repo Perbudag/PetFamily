@@ -1,8 +1,14 @@
 version: "3.9"
 services:
   postgres:
-    image: postgres:latest
+    image: postgres
+    container_name: postgres
 
   seq:
-    image: datalust/seq:latest
+    image: datalust/seq
+    container_name: seq
+
+  minio:
+    image: minio/minio
+    container_name: minio
     
